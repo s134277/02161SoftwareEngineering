@@ -13,7 +13,7 @@ import org.junit.Test;
  *
  */
 
-public class TestCreateUser {
+public class TestLogin {
 
 
 
@@ -26,6 +26,19 @@ public class TestCreateUser {
 	 */
 	@Test
 	public void testLogin() {
+		// opretter bruger
+		System sys = new System();
+		User user = sys.newUser("Michael","123");
+		
+		//logger ind med bruger
+		Boolean loggedIn = sys.login("Michael","123");
+		assertTrue(loggedIn);
+		
+		// logger ud
+		loggedIn = sys.logOut();
+		assertFalse(loggedIn);
+		
+		//wrong password
 		
 		
 	}

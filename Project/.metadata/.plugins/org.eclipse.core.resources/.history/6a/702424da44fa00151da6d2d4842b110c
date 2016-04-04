@@ -7,7 +7,23 @@ import java.util.List;
 
 import org.junit.Test;
 
+/**
+ * This class contains tests, testing the functionality of adding books to the library.
+ * @author hub
+ *
+ */
+
 public class TestLogin {
+
+
+
+	/** 
+	 * Tests the scenario when the administrator successfully logs in.
+	 * <ol>
+	 *  <li> The administrator logs in with the correct password
+	 * 	<li> The library application knows that the administrator is logged in
+	 * </ol>
+	 */
 	@Test
 	public void testLogin() throws Exception{
 		// opretter bruger
@@ -24,22 +40,15 @@ public class TestLogin {
 		
 		//wrong password
 		try{
-			loggedIn = sys.login("Michael","321");
+			sys.login("Michael","321");
 			fail("WrongCredentialsException exception should have been thrown");
 		} catch (WrongCredentialsException e) {
 			assertEquals("Wrong Password or Username",e.getMessage());
 			assertEquals("Login",e.getOperation());
 		}
-		assertFalse(loggedIn);
+		
 	
-		//wrong Username
-		try{
-			loggedIn = sys.login("ichael","123");
-			fail("WrongCredentialsException exception should have been thrown");
-		} catch (WrongCredentialsException e) {
-			assertEquals("Wrong Password or Username",e.getMessage());
-			assertEquals("Login",e.getOperation());
-		}
-		assertFalse(loggedIn);
+		
+		
 	}
 }
