@@ -11,7 +11,7 @@ import org.junit.Before;
  * @author hub
  *
  */
-public class sampleDataSetup {
+public class SampleDataSetup {
 	
 	protected System sys = new System();
 	

@@ -32,21 +32,7 @@ public class testAddActivity extends sampleDataSetup {
 		assertEquals(1,act.getDev().length);
 	}
 	@Test
-	public void TestAddActivityFail() throws Exception{
-		Activity act = new Activity("testName","testActi",new Date(3,2016),new Date(3,2017),100);
+	public void TestAddActivity() throws Exception{
 		
-		Project pro = sys.findProject("testName");
-		pro.setProjectLeader(sys.findDev("Michael"));
-		
-		pro.addActivity(act);
-		
-		//add aktivitet med samme navn
-		try{
-			pro.addActivity(act);
-			fail("ActivityAlreadyExistsException should have been thrown");
-		} catch (ActivityAlreadyExistsException e) {
-			assertEquals("Activity Already Exists",e.getMessage());
-			assertEquals("AddActivityProject",e.getOperation());
-		}
 	}
 }

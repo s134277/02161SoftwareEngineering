@@ -40,13 +40,13 @@ public class testAddActivity extends sampleDataSetup {
 		
 		pro.addActivity(act);
 		
-		//add aktivitet med samme navn
+		//oprette aktivitet med samme navn
 		try{
-			pro.addActivity(act);
-			fail("ActivityAlreadyExistsException should have been thrown");
-		} catch (ActivityAlreadyExistsException e) {
-			assertEquals("Activity Already Exists",e.getMessage());
-			assertEquals("AddActivityProject",e.getOperation());
+			Project pro = sys.createProject("sameName");
+			fail("ProjectAlreadyExistsException should have been thrown");
+		} catch (ProjectAlreadyExistsException e) {
+			assertEquals("Project Already Exists",e.getMessage());
+			assertEquals("CreateProject",e.getOperation());
 		}
 	}
 }

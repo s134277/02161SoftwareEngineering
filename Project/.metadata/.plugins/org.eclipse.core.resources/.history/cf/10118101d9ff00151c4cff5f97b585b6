@@ -40,7 +40,7 @@ public class testAddActivity extends sampleDataSetup {
 		
 		pro.addActivity(act);
 		
-		//add aktivitet med samme navn
+		//adde aktivitet med samme navn
 		try{
 			pro.addActivity(act);
 			fail("ActivityAlreadyExistsException should have been thrown");
