@@ -1,0 +1,78 @@
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import org.junit.Test;
+
+public class TestCreateProject {
+	@Test
+	public void testCreateProject(){
+		// opretter bruger
+		System sys = new System();
+		User user = sys.newUser("Michael","123");
+		User dev = sys.newUser("Jonas","321");
+				
+		//logger ind med bruger
+		Boolean loggedIn = sys.login("Michael","123");
+		
+		Project pro = sys.createProject("testName");
+		
+		pro.setCostumer("costumer");
+		pro.setStartDate(3,2016);
+		pro.setEndDate(3,2017);
+		
+		pro.addDev(sys.findDev("Jonas"));
+		
+		pro.setTimeBudget(100);
+		pro.setProjectLeader(pro.getDev("Jonas"));
+		
+		//checker om projektet er oprettet
+		assertEquals(1,sys.getProjects().length);
+		
+		//Checker om søg funktionen virker og navnet
+		pro = sys.findProject("testName");
+		assertEquals("testName",pro.getName());
+		
+		//Checker customer
+		assertEquals("costumer",pro.getName());
+		
+		//Checker start/end date
+		assertEquals(3,pro.getStartWeek());
+		assertEquals(2016,pro.getStartYear());
+		assertEquals(3,pro.getEndWeek());
+		assertEquals(2017,pro.getEndYear());
+		
+		//checker om dev er tilføjet
+		assertEquals(dev,pro.findDev("Jonas"));
+		
+		//Checker time budget
+		assertEquals(100,pro.getTimeBudget());
+		
+		//checker projectleader
+		assertEquals(dev,pro.getProjectLeader());
+	}
+	
+	@Test
+	public void testCreateProjectFail() throws Exception{
+		//opretter system og brugere
+		System sys = new System();
+		User user = sys.newUser("Michael","123");
+		User dev = sys.newUser("Jonas","321");
+				
+		//logger ind med bruger
+		Boolean loggedIn = sys.login("Michael","123");
+		
+		Project pro = sys.createProject("sameName");
+		
+		try{
+			Project pro = sys.createProject("sameName");s
+			fail("Project already exception should have been thrown");
+		} catch (WrongCredentialsException e) {
+			assertEquals("Wrong Password or Username",e.getMessage());
+			assertEquals("Login",e.getOperation());
+		}
+		assertFalse(loggedIn);
+		
+	}
+}
