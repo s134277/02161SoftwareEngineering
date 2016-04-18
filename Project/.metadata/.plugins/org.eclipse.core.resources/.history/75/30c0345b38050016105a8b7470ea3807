@@ -1,0 +1,5 @@
+package projectManager;
+
+public class NoPasswordEnteredException extends Exception {
+
+}

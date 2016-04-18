@@ -1,0 +1,10 @@
+package projectManager;
+
+public class Date {
+	private int week;
+	private year;
+	public Date(int i, int j) {
+		// TODO Auto-generated constructor stub
+	}
+
+}

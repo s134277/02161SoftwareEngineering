@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="testCreateUser" project="ProjectManager" tests="3" started="3" failures="0" errors="0" ignored="0">
+  <testsuite name="projectManager.testCreateUser" time="0.0">
+    <testcase name="testCreateUserMichael123" classname="projectManager.testCreateUser" time="0.0"/>
+    <testcase name="testUsernameTaken" classname="projectManager.testCreateUser" time="0.0"/>
+    <testcase name="testNoPasswordEntered" classname="projectManager.testCreateUser" time="0.0"/>
+  </testsuite>
+</testrun>

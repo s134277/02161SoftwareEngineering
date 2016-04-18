@@ -1,0 +1,11 @@
+package projectManager;
+
+public class DateServer {
+		public Calendar getDate() {
+			Calendar c = GregorianCalendar.getInstance();
+			return c;
+		}
+
+	}
+
+}

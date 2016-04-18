@@ -1,0 +1,43 @@
+package projectManager;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Project {
+	String name;
+	String costumer;
+	Date startDate;
+	Date endDate;
+	List<User> users = new ArrayList<User>();
+	int timeBudget;
+	User projectleader;
+	public Project(String name) {
+		this.name = name;
+	}
+	public void setCostumer(String costumer) {
+		this.costumer = costumer;
+	}
+	public void setStartDate(int week, int year) {
+		startDate = new Date(week,year);	
+	}
+	public void setEndDate(int week, int year) {
+		endDate = new Date(week,year);
+		
+	}
+	public void addDev(User user) {
+		user.add(user);
+	}
+	public void setTimeBudget(int i) {
+		// TODO Auto-generated method stub
+		
+	}
+	public Object getDev(String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public void setProjectLeader(Object dev) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

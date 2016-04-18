@@ -1,0 +1,31 @@
+import static org.junit.Assert.*;
+
+import java.sql.Date;
+
+import org.junit.Test;
+
+public class testDate extends sampleDataSetup {
+	@Test
+	public void TestDate(){
+		//opretter mock server
+		DateServer dateServer = mock(DateServer.class);
+		sys.setDateServer(dateServer);
+
+		Calendar cal = new GregorianCalendar(2016,Calendar.JANUARY,5);
+		when(dateServer.getDate()).thenReturn(cal);
+		
+		//opretter datoer
+		Date d1 = new Date(3,2016);
+		Date d2 = new Date(4,2016);
+		Date d3 = new Date(7,2015);
+		
+		//tester denne dato mod idag
+		assertTrue(sys.afterToday(d1));
+		assertFale(sys.afterToday(d3));
+		
+		//tester to datoer mod hinanden
+		assertTrue(d1.before(d2));
+		
+		
+	}
+}

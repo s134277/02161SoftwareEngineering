@@ -1,0 +1,47 @@
+package projectManager;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class System {
+	List<User> users = new ArrayList<User>();
+	User currentUser;
+	boolean loggedIn;
+	public System(){
+		
+	}
+
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void register(User user) throws UserAlreadyExistsException, NoPasswordEnteredException {
+		for(User user1 : users){
+			if(user.getName().equals(user1.getName())){
+				throw new UserAlreadyExistsException("Register user operation not allowed if username already taken.","CreateUser");
+			}
+		}
+		if(user.getPW().isEmpty()) throw new NoPasswordEnteredException("Register user operation not allowed if no password entered.","CreateUser");
+		users.add(user);
+	}
+
+	public Boolean login(String name, String PW) {
+		User user = findDev(name);
+		if(user.getPW().equals(PW)){
+			currentUser = user;
+		}
+		return user.getPW().equals(PW);
+	}
+	public User findDev(String name){
+		for(User user : users){
+			if(name.equals(user.getName())) return user;
+		}
+		return null;
+	}
+
+	public Boolean logOut() {
+		return null;
+	}
+	
+	
+}

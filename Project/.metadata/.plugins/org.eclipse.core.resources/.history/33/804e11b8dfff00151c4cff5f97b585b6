@@ -1,0 +1,22 @@
+import org.junit.Test;
+
+public class testDate extends sampleDataSetup {
+	@Test
+	public void TestDate(){
+		//opretter mock server
+		DateServer dateServer = mock(DateServer.class);
+		sys.setDateServer(dateServer);
+
+		Calendar cal = new GregorianCalendar(2016,Calendar.JANUARY,5);
+		when(dateServer.getDate()).thenReturn(cal);
+		
+		//opretter datoer
+		Date d1 = new Date(3,2016);
+		Date d2 = new Date(4,2016);
+		
+		assertFalse(sys.before(d1));
+		
+		
+		
+	}
+}

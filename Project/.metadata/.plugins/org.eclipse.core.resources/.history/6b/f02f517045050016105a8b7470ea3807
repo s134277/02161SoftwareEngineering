@@ -1,0 +1,11 @@
+package projectManager;
+
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+public class DateServer {
+		public Calender getDate() {
+			Calendar c = GregorianCalendar.getInstance();
+			return c;
+		}
+}
