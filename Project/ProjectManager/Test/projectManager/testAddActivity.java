@@ -8,36 +8,57 @@ import org.junit.Test;
 
 public class testAddActivity extends sampleDataSetup {
 	@Test
-	public void TestAddActivity(){
+	public void TestAddActivity() throws NotProjectLeaderException, ActivityAlreadyExistsException, UserAlreadyExistsException, NoPasswordEnteredException, WrongCredentialsException, ProjectAlreadyExistsException{
+		MAIN sys = new MAIN();
+		Activity act = new Activity("testName","testActi",new Date(3,2016,sys),new Date(3,2017,sys),100);
 		
-		Activity act = new Activity("testName","testActi",new Date(3,2016),new Date(3,2017),100);
+		User user = new User("Michael","123");
+		User dev = new User("Jonas","321");
+		sys.register(user);
+		sys.register(dev);
 		
-		Project pro = sys.findProject("testName");
-		pro.setProjectLeader(sys.findDev("Michael"));
+		sys.login("Michael","123");
+		
+		Project pro = new Project("testName",sys);
+		sys.createProject(pro);
+		
+		pro.addDev(user);
+		pro.setProjectLeader(user);
 		
 		//checker om der er aktiviteter tilføjet
-		assertEquals(0,pro.getActivities().length);
+		assertEquals(0,pro.getActivities().size());
 		
 		pro.addActivity(act);
 		
 		//checker om aktiviteten er blevet tiføjet til projectet
-		assertEquals(1,pro.getActivities().length);
+		assertEquals(1,pro.getActivities().size());
 		
 		
 		//checker om der er added nogle dev
-		assertEquals(0,act.getDev().length);
+		assertEquals(0,act.getUsers().size());
 		
 		act.addDev(pro.findDev("Jonas"));
 		
 		//checker om dev er blevet added
-		assertEquals(1,act.getDev().length);
+		assertEquals(1,act.getUsers().size());
 	}
 	@Test
 	public void TestAddActivityFail() throws Exception{
-		Activity act = new Activity("testName","testActi",new Date(3,2016),new Date(3,2017),100);
+		MAIN sys = new MAIN();
+		User user = new User("Michael","123");
+		User dev = new User("Jonas","321");
+		sys.register(user);
+		sys.register(dev);
 		
-		Project pro = sys.findProject("testName");
-		pro.setProjectLeader(sys.findDev("Michael"));
+		sys.login("Michael","123");
+		
+		Project pro = new Project("testName",sys);
+		sys.createProject(pro);
+		
+		Activity act = new Activity("testName","testActi",new Date(3,2016,sys),new Date(3,2017,sys),100);
+		
+		pro.addDev(user);
+		pro.setProjectLeader(user);
 		
 		pro.addActivity(act);
 		

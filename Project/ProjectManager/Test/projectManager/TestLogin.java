@@ -12,7 +12,7 @@ public class TestLogin {
 	@Test
 	public void testLogin() throws Exception{
 		// opretter bruger
-		System sys = new System();
+		MAIN sys = new MAIN();
 		User user = new User("Michael","123");
 		sys.register(user);
 		

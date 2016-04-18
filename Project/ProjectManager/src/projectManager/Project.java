@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Project {
-	private System sys;
+	private MAIN sys;
 	private String name;
 	private String costumer = "Softwarehuset A/S";
 	private Date startDate;
@@ -14,7 +14,7 @@ public class Project {
 	private int timeBudget;
 	private User projectLeader;
 	
-	public Project(String name, System sys) {
+	public Project(String name, MAIN sys) {
 		this.name = name;
 		this.sys = sys;
 	}
@@ -22,10 +22,10 @@ public class Project {
 		this.costumer = costumer;
 	}
 	public void setStartDate(int week, int year) {
-		startDate = new Date(week,year);	
+		startDate = new Date(week,year,sys);	
 	}
 	public void setEndDate(int week, int year) {
-		endDate = new Date(week,year);
+		endDate = new Date(week,year,sys);
 		
 	}
 	public void addDev(User user) {
@@ -67,13 +67,21 @@ public class Project {
 	public String getCostumer() {
 		return costumer;
 	}
-	public void addActivity(Activity activity) throws NotProjectLeaderException {
+	public void addActivity(Activity activity) throws NotProjectLeaderException, ActivityAlreadyExistsException {
 		if(sys.getCurrentUser().equals(projectLeader)){
+			for(Activity act : acts){
+				if(act.getName().equals(activity.getName())){
+					throw new ActivityAlreadyExistsException("Activity Already Exists","AddActivityProject");
+				}
+			}
 			acts.add(activity);
 		}else{
 			throw new NotProjectLeaderException("You have to be project leader to use this function","Add activity");
 		}
 		
+	}
+	public List<Activity> getActivities() {
+		return acts;
 	}
 
 }

@@ -1,8 +1,0 @@
-import org.junit.Test;
-
-public class testDate {
-	@Test
-	public void TestDate(){
-		TimeManager tm = sys.getTimeManager();
-	}
-}

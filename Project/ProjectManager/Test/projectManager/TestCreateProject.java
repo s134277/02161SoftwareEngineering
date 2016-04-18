@@ -10,7 +10,7 @@ public class TestCreateProject {
 	@Test
 	public void testCreateProject() throws UserAlreadyExistsException, NoPasswordEnteredException, WrongCredentialsException, ProjectAlreadyExistsException{
 		// opretter bruger og project
-		System sys = new System();
+		MAIN sys = new MAIN();
 		User user = new User("Michael","123");
 		sys.register(user);
 		User dev = new User("Jonas","321");
@@ -60,7 +60,7 @@ public class TestCreateProject {
 	@Test
 	public void testCreateProjectFail() throws Exception{
 		//opretter system og brugere
-		System sys = new System();
+		MAIN sys = new MAIN();
 		User user = new User("Michael","123");
 		sys.register(user);
 		User dev = new User("Jonas","321");
@@ -86,8 +86,8 @@ public class TestCreateProject {
 		}
 		
 		//tilføje aktiviteter når man ikke er projectLeader
-		Date start = new Date(3,2016);
-		Date end = new Date(3,2017);
+		Date start = new Date(3,2016,sys);
+		Date end = new Date(3,2017,sys);
 		try{
 			pro.addActivity(new Activity("testName","testActi",start,end,100));
 			fail("NotProjectLeaderException should have been thrown");

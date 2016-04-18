@@ -1,0 +1,37 @@
+package projectManager;
+
+public class Date {
+	private int week;
+	private int year;
+	private MAIN sys;
+	public Date(int week, int year,MAIN sys) {
+		this.week = week;
+		this.year = year;
+		this.sys = sys;
+	}
+	public int getWeek() {
+		return week;
+	}
+	public int getYear() {
+		return year;
+	}
+	public boolean afterToday() {
+		sys.getDate();
+		Date today = new Date(2,2016,sys);
+		if(today.getYear() <= year){
+			if(today.getWeek() <= week){
+				return true;
+			}
+		}
+		return false;
+		
+	}
+	public boolean before(Date d2) {
+		if(d2.getYear() >= year){
+			if(d2.getWeek() >= week){
+				return true
+			}
+		}
+	}
+
+}

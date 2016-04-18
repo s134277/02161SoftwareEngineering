@@ -1,20 +1,26 @@
 package projectManager;
 import static org.junit.Assert.*;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
-public class testDate extends sampleDataSetup {
+public class testDate{
 	@Test
-	public void TestDate(){
+	public void TestDate() throws UserAlreadyExistsException, NoPasswordEnteredException{
+		// opretter bruger og project
+		MAIN sys = new MAIN();
+		User user = new User("Michael","123");
+		sys.register(user);
+		User dev = new User("Jonas","321");
+		sys.register(dev);
+		
 		//opretter mock server
 		DateServer dateServer = mock(DateServer.class);
 		sys.setDateServer(dateServer);
-
-		Calendar cal = new GregorianCalendar(2016,Calendar.JANUARY,5);
-		when(dateServer.getDate()).thenReturn(cal);
+		int[] d = new int[]{2,2016};
+		when(dateServer.getDate()).thenReturn(d);
 		
 		//opretter datoer
 		Date d1 = new Date(3,2016,sys);
@@ -27,7 +33,7 @@ public class testDate extends sampleDataSetup {
 		
 		//tester to datoer mod hinanden
 		assertTrue(d1.before(d2));
-		assertTrue(d1.before(d1));
+		assertFalse(d1.before(d1));
 		assertFalse(d1.before(d3));
 		
 		

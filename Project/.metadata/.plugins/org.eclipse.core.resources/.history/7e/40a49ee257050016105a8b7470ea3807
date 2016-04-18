@@ -1,0 +1,33 @@
+package projectManager;
+
+public class Date {
+	private int week;
+	private int year;
+	private MAIN sys;
+	public Date(int week, int year,MAIN sys) {
+		this.week = week;
+		this.year = year;
+	}
+	public int getWeek() {
+		return week;
+	}
+	public int getYear() {
+		return year;
+	}
+	public boolean afterToday() {
+		Date today = sys.getDate();
+		Date today = new Date(2,2016,sys);
+		if(today.getYear() <= year){
+			if(today.getWeek() <= week){
+				return true;
+			}
+		}
+		return false;
+		
+	}
+	public boolean before(Date d2) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

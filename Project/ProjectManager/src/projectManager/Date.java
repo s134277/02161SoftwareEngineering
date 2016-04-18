@@ -3,10 +3,11 @@ package projectManager;
 public class Date {
 	private int week;
 	private int year;
-	private System sys;
-	public Date(int week, int year,System sys) {
+	private MAIN sys;
+	public Date(int week, int year,MAIN sys) {
 		this.week = week;
 		this.year = year;
+		this.sys = sys;
 	}
 	public int getWeek() {
 		return week;
@@ -17,16 +18,19 @@ public class Date {
 	public boolean afterToday() {
 		Date today = sys.getDate();
 		if(today.getYear() <= year){
-			if(today.getWeek() <= week){
-				return true;
-			}
+			return today.getWeek() <= week;
+		}else{
+			return false;
 		}
-		return false;
 		
 	}
 	public boolean before(Date d2) {
-		// TODO Auto-generated method stub
-		return false;
+		if(d2.getYear() == year){
+			return d2.getWeek() > week;
+		}else{
+			return d2.getYear() > year;
+		}
+		
+		
 	}
-
 }

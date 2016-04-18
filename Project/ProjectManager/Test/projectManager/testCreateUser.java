@@ -21,7 +21,7 @@ public class testCreateUser {
 	 */
 	@Test
 	public void testCreateUserMichael123() throws UserAlreadyExistsException, NoPasswordEnteredException {
-		System sys = new System();
+		MAIN sys = new MAIN();
 		
 		// Step 1)
 		List<User> users = sys.getUsers();
@@ -43,7 +43,7 @@ public class testCreateUser {
 	
 	@Test
 	public void testUsernameTaken() throws Exception {
-		System sys = new System();
+		MAIN sys = new MAIN();
 
 		//step 1
 		User user1 = new User("Michael","123");
@@ -67,7 +67,7 @@ public class testCreateUser {
 	
 	@Test
 	public void testNoPasswordEntered() throws Exception {
-		System sys = new System();
+		MAIN sys = new MAIN();
 		
 		User user = new User("Jonas","");
 

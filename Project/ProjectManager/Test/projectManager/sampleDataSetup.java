@@ -14,26 +14,29 @@ import org.junit.Before;
  */
 public class sampleDataSetup {
 	
-	protected System sys = new System();
+	MAIN sys = new MAIN();
 	
 	@Before
 	public void setUp() throws Exception {
 		// Create user
-		System sys = new System();
-		User user = sys.newUser("Michael","123");
-		User dev = sys.newUser("Jonas","321");
+		MAIN sys = new MAIN();
+		User user = new User("Michael","123");
+		User dev = new User("Jonas","321");
+		sys.register(user);
+		sys.register(dev);
 								
 		//Loggin the user in
 		Boolean loggedIn = sys.login("Michael","123");
 		assertTrue(loggedIn);
-		Project pro = sys.createProject("testName");
+		Project pro = new Project("testName",sys);
+		sys.createProject(pro);
 						
 		pro.setCostumer("costumer");
 		pro.setStartDate(3,2016);
 		pro.setEndDate(3,2017);
 		pro.addDev(sys.findDev("Jonas"));
 		pro.setTimeBudget(100);
-		pro.setProjectLeader(pro.getDev("Jonas"));
+		pro.setProjectLeader(pro.findDev("Jonas"));
 	}
 
 

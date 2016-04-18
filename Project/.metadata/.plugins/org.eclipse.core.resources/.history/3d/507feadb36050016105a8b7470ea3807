@@ -1,9 +1,0 @@
-package projectManager;
-
-public class System {
-	public System(){
-		
-	}
-	
-	
-}

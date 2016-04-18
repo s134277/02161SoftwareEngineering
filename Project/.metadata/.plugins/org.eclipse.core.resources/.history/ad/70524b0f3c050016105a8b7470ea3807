@@ -1,9 +1,0 @@
-package projectManager;
-
-public class Project {
-
-	public Project(String name) {
-		// TODO Auto-generated constructor stub
-	}
-
-}

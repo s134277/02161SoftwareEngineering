@@ -11,9 +11,11 @@ public class testRegisterTimeOff extends sampleDataSetup{
 	/*
 	 * 1. Tests if a user can register one week of vacation (week 5 of 2016)
 	 * 
-	 * 2. Tests if the system throws correct error if bad duration argument is entered
+	 * 2. Tests if a user can  register several weeks of vacation
 	 * 
-	 * 3. Tests if the system throws correct error if registration conflicts with another activity
+	 * 3. Tests if the system throws correct error if bad duration argument is entered
+	 * 
+	 * 4. Tests if the system throws correct error if registration conflicts with another activity
 	 */
 	
 	
@@ -21,13 +23,30 @@ public class testRegisterTimeOff extends sampleDataSetup{
 	public void testRegisterHoliday(){
 		User user = sys.findDev("Michael");
 		Date startDate = new Date(5,2016);
-		//Registers holiday:
+		
+		//Asserts if the user is available in week 4, 5 and 6:
+		assertTrue(user.isAvailable(5,2016));
+		assertTrue(user.isAvailable(6,2016));
+		assertTrue(user.isAvailable(4,2016));
+		
+		
+		//Registers holiday: (RegisterHoliday returns true if conflicts occur)
 		//Arguments: beginning week, beginning year, number of weeks, reason
-		assertFalse(user.RegisterHoliday(startDate,0,"Holiday"));
+		assertFalse(user.RegisterHoliday(startDate,1,"Holiday"));
 		
 		
-		//Asserts if the user is now unavailable in week 5:
+		//Asserts if the user is now unavailable in week 5 and available in week 4 and 6:
 		assertFalse(user.isAvailable(5,2016));
+		assertTrue(user.isAvailable(6,2016));
+		assertTrue(user.isAvailable(4,2016));
+		
+		//Registers holiday in week 6-9:
+		Date startDate2 = new Date(6,2016);
+		assertFalse(user.RegisterHoliday(startDate2,4,"Holiday"));
+		
+		//Tests if the user is now unavailable during the holiday:
+		assertFalse(user.isAvailable(6,2016));
+		assertFalse(user.isAvailable(9,2016));
 		
 	}
 	
@@ -66,3 +85,4 @@ public class testRegisterTimeOff extends sampleDataSetup{
 	}
 	
 }
+Chat afsluttet
