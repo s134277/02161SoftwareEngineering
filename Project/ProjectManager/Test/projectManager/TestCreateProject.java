@@ -11,9 +11,9 @@ public class TestCreateProject {
 	public void testCreateProject() throws UserAlreadyExistsException, NoPasswordEnteredException, WrongCredentialsException, ProjectAlreadyExistsException{
 		// opretter bruger og project
 		MAIN sys = new MAIN();
-		User user = new User("Michael","123");
+		User user = new User("Michael","123",37);
 		sys.register(user);
-		User dev = new User("Jonas","321");
+		User dev = new User("Jonas","321",37);
 		sys.register(dev);
 		
 				
@@ -61,9 +61,9 @@ public class TestCreateProject {
 	public void testCreateProjectFail() throws Exception{
 		//opretter system og brugere
 		MAIN sys = new MAIN();
-		User user = new User("Michael","123");
+		User user = new User("Michael","123",37);
 		sys.register(user);
-		User dev = new User("Jonas","321");
+		User dev = new User("Jonas","321",37);
 		sys.register(dev);
 				
 		//logger ind med bruger

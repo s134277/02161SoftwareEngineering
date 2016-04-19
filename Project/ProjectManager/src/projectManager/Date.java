@@ -33,4 +33,13 @@ public class Date {
 		
 		
 	}
+	public int getRemainingWeeks() {
+		Date today = sys.getDate();
+		if(today.getYear() == year){
+			return week - today.getWeek();
+		}else{
+			return today.getWeek() + week;
+		}
+		
+	}
 }

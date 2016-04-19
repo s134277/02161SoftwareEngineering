@@ -11,9 +11,9 @@ public class testDate{
 	public void TestDate() throws UserAlreadyExistsException, NoPasswordEnteredException{
 		// opretter bruger og project
 		MAIN sys = new MAIN();
-		User user = new User("Michael","123");
+		User user = new User("Michael","123",37);
 		sys.register(user);
-		User dev = new User("Jonas","321");
+		User dev = new User("Jonas","321",37);
 		sys.register(dev);
 		
 		//opretter mock server

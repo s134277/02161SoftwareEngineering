@@ -1,0 +1,80 @@
+package projectManager;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class User {
+	private String name; 
+	private String PW; 
+	private int weeklyWorkHours;
+	private List<Activity> acts = new ArrayList<Activity>();
+	private List<Integer> RegisteredTime = new ArrayList<Integer>();
+	private List<Activity> holiday = new ArrayList<Activity>();
+	
+	
+	public User(String name, String PW) {
+		this.name = name;
+		this.PW = PW;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getPW() {
+		return PW;
+	}
+
+	public boolean isAvailable(int week, int year,int hours) {
+		int workHours=0;
+		for(Activity act : acts){
+			if(year <= act.getStartDate().getYear() && year >= act.getEndDate().getYear()){
+				if(week <= act.getStartDate().getWeek() && week >= act.getEndDate().getWeek()){
+					workHours = workHours + (act.getRemainingHours()/act.getEndDate().getRemainingWeeks()) / act.getUsers().size();
+				}
+			}
+		}
+		return weeklyWorkHours < workHours + hours;
+	}
+
+	public List<Activity> getActs() {
+		return acts;
+	}
+
+	public int getRegisteredTime(Activity act) {
+		int i = 0;
+		for(Activity act1 : acts){
+			if(act.getName().equals(act1.getName())) {
+				return RegisteredTime.get(i);
+			}
+			i++;
+		}
+		return 0;
+	}
+
+	public int getWeeklyWorkHours() {
+		return weeklyWorkHours;
+	}
+
+	public boolean RegisterTime(Date date, String name, int hours) {
+		Activity act;
+		if(name.equals("Holiday")){
+			act = holiday;
+		}else{
+			if(name.equals("Sick")){
+				act = sick;
+			}else{
+				 act = findAct(name);
+			}
+		}
+		return 
+	}
+
+	private Activity findAct(String name2) {
+		for(Activity act : acts){
+			if(name.equals(act.getName())) return act;
+		}
+		return null;
+	}
+
+}

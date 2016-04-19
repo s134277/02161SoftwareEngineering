@@ -6,14 +6,14 @@ import static org.junit.Assert.fail;
 import java.util.List;
 import org.junit.Test;
 
-public class testAddActivity extends sampleDataSetup {
+public class testAddActivity{
 	@Test
 	public void TestAddActivity() throws NotProjectLeaderException, ActivityAlreadyExistsException, UserAlreadyExistsException, NoPasswordEnteredException, WrongCredentialsException, ProjectAlreadyExistsException{
 		MAIN sys = new MAIN();
 		Activity act = new Activity("testName","testActi",new Date(3,2016,sys),new Date(3,2017,sys),100);
 		
-		User user = new User("Michael","123");
-		User dev = new User("Jonas","321");
+		User user = new User("Michael","123",37);
+		User dev = new User("Jonas","321",37);
 		sys.register(user);
 		sys.register(dev);
 		
@@ -23,6 +23,7 @@ public class testAddActivity extends sampleDataSetup {
 		sys.createProject(pro);
 		
 		pro.addDev(user);
+		pro.addDev(dev);
 		pro.setProjectLeader(user);
 		
 		//checker om der er aktiviteter tilføjet
@@ -34,9 +35,6 @@ public class testAddActivity extends sampleDataSetup {
 		assertEquals(1,pro.getActivities().size());
 		
 		
-		//checker om der er added nogle dev
-		assertEquals(0,act.getUsers().size());
-		
 		act.addDev(pro.findDev("Jonas"));
 		
 		//checker om dev er blevet added
@@ -45,8 +43,8 @@ public class testAddActivity extends sampleDataSetup {
 	@Test
 	public void TestAddActivityFail() throws Exception{
 		MAIN sys = new MAIN();
-		User user = new User("Michael","123");
-		User dev = new User("Jonas","321");
+		User user = new User("Michael","123",37);
+		User dev = new User("Jonas","321",37);
 		sys.register(user);
 		sys.register(dev);
 		

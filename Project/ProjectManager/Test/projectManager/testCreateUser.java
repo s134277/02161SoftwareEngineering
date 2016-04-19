@@ -28,7 +28,7 @@ public class testCreateUser {
 		assertEquals(0, users.size());
 
 		// Step 2)
-		User user = new User("Michael", "123");
+		User user = new User("Michael", "123",37);
 
 		sys.register(user);
 		users = sys.getUsers();
@@ -46,12 +46,12 @@ public class testCreateUser {
 		MAIN sys = new MAIN();
 
 		//step 1
-		User user1 = new User("Michael","123");
+		User user1 = new User("Michael","123",37);
 		sys.register(user1);
 		assertEquals(1, sys.getUsers().size());
 		
 		//step 2
-		User user2 = new User("Michael","123");
+		User user2 = new User("Michael","123",37);
 
 		try {
 			sys.register(user2);
@@ -69,7 +69,7 @@ public class testCreateUser {
 	public void testNoPasswordEntered() throws Exception {
 		MAIN sys = new MAIN();
 		
-		User user = new User("Jonas","");
+		User user = new User("Jonas","",37);
 
 		try {
 			sys.register(user);

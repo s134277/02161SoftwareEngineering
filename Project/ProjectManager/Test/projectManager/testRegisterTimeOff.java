@@ -6,7 +6,7 @@ import static org.junit.Assert.fail;
 import java.util.List;
 import org.junit.Test;
 
-public class testRegisterTimeOff extends sampleDataSetup{
+public class testRegisterTimeOff{
 	
 	/*
 	 * 1. Tests if a user can register one week of vacation (week 5 of 2016)
@@ -20,54 +20,57 @@ public class testRegisterTimeOff extends sampleDataSetup{
 	
 	
 	@Test
-	public void testRegisterHoliday(){
-		User user = sys.findDev("Michael");
-		Date startDate = new Date(5,2016);
+	public void testRegisterHoliday() throws UserAlreadyExistsException, NoPasswordEnteredException, WrongCredentialsException{
+		MAIN sys = new MAIN();
+		
+		User user = new User("Michael","123",37);
+		User dev = new User("Jonas","321",37);
+		sys.register(user);
+		sys.register(dev);
+		
+		sys.login("Michael","123");
+		Date date = new Date(5,2016,sys);
 		
 		//Asserts if the user is available in week 4, 5 and 6:
-		assertTrue(user.isAvailable(5,2016));
-		assertTrue(user.isAvailable(6,2016));
-		assertTrue(user.isAvailable(4,2016));
+		assertTrue(user.isAvailable(5,2016,10));
+		assertTrue(user.isAvailable(6,2016,10));
+		assertTrue(user.isAvailable(4,2016,10));
 		
 		
 		//Registers holiday: (RegisterHoliday returns true if conflicts occur)
-		//Arguments: beginning week, beginning year, number of weeks, reason
-		assertFalse(user.RegisterHoliday(startDate,1,"Holiday"));
+		assertFalse(user.RegisterTime(date,"Holiday",user.getWeeklyWorkHours()));
 		
 		
 		//Asserts if the user is now unavailable in week 5 and available in week 4 and 6:
-		assertFalse(user.isAvailable(5,2016));
-		assertTrue(user.isAvailable(6,2016));
-		assertTrue(user.isAvailable(4,2016));
+		assertFalse(user.isAvailable(5,2016,10));
+		assertTrue(user.isAvailable(6,2016,10));
+		assertTrue(user.isAvailable(4,2016,10));
 		
 		//Registers holiday in week 6-9:
-		Date startDate2 = new Date(6,2016);
-		assertFalse(user.RegisterHoliday(startDate2,4,"Holiday"));
+		Date date2 = new Date(6,2016,sys);
+		Date date3 = new Date(7,2016,sys);
+		Date date4 = new Date(8,2016,sys);
+		Date date5 = new Date(9,2016,sys);
+		assertFalse(user.RegisterTime(date2,"Holiday",user.getWeeklyWorkHours()));
+		assertFalse(user.RegisterTime(date3,"Holiday",user.getWeeklyWorkHours()));
+		assertFalse(user.RegisterTime(date4,"Holiday",user.getWeeklyWorkHours()));
+		assertFalse(user.RegisterTime(date5,"Holiday",user.getWeeklyWorkHours()));
 		
 		//Tests if the user is now unavailable during the holiday:
-		assertFalse(user.isAvailable(6,2016));
-		assertFalse(user.isAvailable(9,2016));
+		assertFalse(user.isAvailable(6,2016,10));
+		assertFalse(user.isAvailable(7,2016,10));
+		assertFalse(user.isAvailable(8,2016,10));
+		assertFalse(user.isAvailable(9,2016,10));
 		
 	}
 	
-	public void testRegisterHolidayDurationFail() throws Exception{
+	public void testRegisterHolidayConflict() throws NotProjectLeaderException, ActivityAlreadyExistsException{
+		MAIN sys = new MAIN();
+		
 		User user = sys.findDev("Michael");
-		Date startDate = new Date(5,2016);
-		//Registers holiday with wrong duration:
-		try{
-			user.RegisterHoliday(startDate,0,"Holiday");
-			fail("registerActivityException exception should have been thrown");
-		} catch (registerActivityException e) {
-			assertEquals("Wrong duration for holiday given, must be positive integer",e.getMessage());
-			assertEquals("duration",e.getOperation());
-		}
-	}
-	
-	public void testRegisterHolidayConflict(){
-		User user = sys.findDev("Michael");
-		Date start = new Date(5,2016);
-		Date end = new Date(6,2016);
-		Date startDate = new Date(5,2016);
+		Date start = new Date(5,2016,sys);
+		Date end = new Date(6,2016,sys);
+		Date startDate = new Date(5,2016,sys);
 		Project pro = sys.findProject("testName");
 		//scheduling a conflicting activity:
 		Activity act = new Activity("testName","testActi",start,end,100);
@@ -81,8 +84,7 @@ public class testRegisterTimeOff extends sampleDataSetup{
 		 * but to notify if there is a conflict between a holiday 
 		 * and a scheduled activity
 		 */
-		assertTrue(user.RegisterHoliday(startDate,0,"Holiday")); //returns true if conflict
+		assertTrue(user.RegisterTime(startDate,"Holiday",user.getWeeklyWorkHours())); //returns true if conflict
 	}
 	
 }
-Chat afsluttet

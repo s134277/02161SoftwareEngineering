@@ -20,6 +20,7 @@ public class Activity {
 	}
 	public void addDev(User dev) {
 		users.add(dev);
+		dev.getActs().add(this);
 	}
 	public User findDev() {
 		for(User user : users){
@@ -33,5 +34,22 @@ public class Activity {
 	public String getName() {
 		return name;
 	}
+	public Date getStartDate() {
+		return startDate;
+	}
+	public Date getEndDate() {
+		return endDate;
+	}
+	public int getRemainingHours() {
+		int hours = 0;
+		for(User user : users){
+			hours = hours + user.getRegisteredTime(this);
+		}
+		return timeBudget - hours;
+	}
+	public int getTimeBudget() {
+		return timeBudget;
+	}
+	
 
 }

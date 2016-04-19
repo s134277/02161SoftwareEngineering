@@ -13,7 +13,7 @@ public class TestLogin {
 	public void testLogin() throws Exception{
 		// opretter bruger
 		MAIN sys = new MAIN();
-		User user = new User("Michael","123");
+		User user = new User("Michael","123",37);
 		sys.register(user);
 		
 		//logger ind med bruger

@@ -14,7 +14,9 @@ public class MAIN {
 	public MAIN(){
 		
 	}
-
+	public boolean getLoggedIn(){
+		return loggedIn;
+	}
 	public List<User> getUsers() {
 		return users;
 	}
