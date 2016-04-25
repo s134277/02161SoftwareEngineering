@@ -1,0 +1,41 @@
+package projectManager;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+
+public class TestRegisterTime {
+	@Test
+	public void testRegisterTime() throws UserAlreadyExistsException, NoPasswordEnteredException, WrongCredentialsException, ProjectAlreadyExistsException, NotProjectLeaderException, ActivityAlreadyExistsException{
+		MAIN sys = new MAIN();
+		Activity act = new Activity("testName","testActi",new Date(3,2016,sys),new Date(3,2017,sys),100);
+		Activity act2 = new Activity("test2Name","testActi",new Date(3,2016,sys),new Date(3,2017,sys),100);
+		
+		User user = new User("Michael","123",37);
+		User dev = new User("Jonas","321",37);
+		sys.register(user);
+		sys.register(dev);
+		
+		sys.login("Michael","123");
+		
+		Project pro = new Project("testName",sys);
+		sys.createProject(pro);
+		
+		pro.addDev(user);
+		pro.addDev(dev);
+		pro.setProjectLeader(user);
+		pro.addActivity(act);
+		pro.addActivity(act2);
+		act.addDev(dev);
+		act2.addDev(dev);
+		
+		dev.RegisterTime(new Date(10,2016,sys), "testName", 10);
+		dev.RegisterTime(new Date(10,2016,sys), "test2Name", 10);
+		
+		assertEquals(act.getRemainingHours(),90);
+		
+		assertEquals(dev.getRegisteredTime(act),10);
+		
+	}
+}

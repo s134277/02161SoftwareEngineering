@@ -20,13 +20,7 @@ public class Activity {
 	}
 	public void addDev(User dev) {
 		users.add(dev);
-		dev.getActs().add(this);
-	}
-	public User findDev() {
-		for(User user : users){
-			if(name.equals(user.getName())) return user;
-		}
-		return null;
+		dev.addActivity(this);
 	}
 	public List<User> getUsers() {
 		return users;

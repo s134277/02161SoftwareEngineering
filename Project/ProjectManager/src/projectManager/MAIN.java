@@ -67,11 +67,11 @@ public class MAIN {
 		return projects;
 	}
 
-	public Project findProject(String name) {
+	public Project findProject(String name) throws ProjectNotFoundException {
 		for(Project pro : projects){
 			if(name.equals(pro.getName())) return pro;
 		}
-		return null;
+		throw new ProjectNotFoundException("No Project found","Find Project");
 	}
 
 	public User getCurrentUser() {

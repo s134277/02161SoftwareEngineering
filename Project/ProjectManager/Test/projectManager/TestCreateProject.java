@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class TestCreateProject {
 	@Test
-	public void testCreateProject() throws UserAlreadyExistsException, NoPasswordEnteredException, WrongCredentialsException, ProjectAlreadyExistsException{
+	public void testCreateProject() throws UserAlreadyExistsException, NoPasswordEnteredException, WrongCredentialsException, ProjectAlreadyExistsException,UserNotFoundException,ProjectNotFoundException{
 		// opretter bruger og project
 		MAIN sys = new MAIN();
 		User user = new User("Michael","123",37);
@@ -19,9 +19,14 @@ public class TestCreateProject {
 				
 		//logger ind med bruger
 		Boolean loggedIn = sys.login("Michael","123");
+		
+		//opretter to projekter
 		Project pro = new Project("testName",sys);
 		sys.createProject(pro);
+		Project pro2 = new Project("test2",sys);
+		sys.createProject(pro2);
 		
+		//tilføjer information til project
 		pro.setCostumer("costumer");
 		pro.setStartDate(3,2016);
 		pro.setEndDate(3,2017);
@@ -31,8 +36,8 @@ public class TestCreateProject {
 		pro.setTimeBudget(100);
 		pro.setProjectLeader(pro.findDev("Jonas"));
 		
-		//checker om projektet er oprettet
-		assertEquals(1,sys.getProjects().size());
+		//checker om projekteterne er oprettet
+		assertEquals(2,sys.getProjects().size());
 		
 		//Checker om søg funktionen virker og navnet
 		pro = sys.findProject("testName");
@@ -41,11 +46,14 @@ public class TestCreateProject {
 		//Checker customer
 		assertEquals("costumer",pro.getCostumer());
 		
+		//checker standard kunde
+		assertEquals("Softwarehuset A/S",pro2.getCostumer());
+		
 		//Checker start/end date
-		assertEquals(3,pro.getStartWeek());
-		assertEquals(2016,pro.getStartYear());
-		assertEquals(3,pro.getEndWeek());
-		assertEquals(2017,pro.getEndYear());
+		assertEquals(3,pro.getStartDate().getWeek());
+		assertEquals(2016,pro.getStartDate().getYear());
+		assertEquals(3,pro.getEndDate().getWeek());
+		assertEquals(2017,pro.getEndDate().getYear());
 		
 		//checker om dev er tilføjet
 		assertEquals(dev,pro.findDev("Jonas"));
@@ -72,8 +80,7 @@ public class TestCreateProject {
 		Project pro = new Project("sameName",sys);
 		sys.createProject(pro);
 		
-		//checker standard kunde
-		assertEquals("Softwarehuset A/S",pro.getCostumer());
+		
 		
 		//oprette project med samme navn
 		try{
@@ -95,6 +102,23 @@ public class TestCreateProject {
 			assertEquals("You have to be project leader to use this function",e.getMessage());
 			assertEquals("Add activity",e.getOperation());
 		}
-		
+		//Søge på developer med forkert navn
+		pro.addDev(user);
+		try{
+			pro.findDev("michael");
+			fail("UserNotFoundException should have been thrown");
+		} catch (UserNotFoundException e) {
+			assertEquals("No user found",e.getMessage());
+			assertEquals("Find developer",e.getOperation());
+		}
+		//Søge på project med forkert navn
+		try{
+			sys.findProject("forkertNavn");
+			fail("ProjectNotFoundException should have been thrown");
+		} catch (ProjectNotFoundException e) {
+			assertEquals("No Project found",e.getMessage());
+			assertEquals("Find Project",e.getOperation());
+		}
+	
 	}
 }

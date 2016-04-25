@@ -52,10 +52,6 @@ public class User {
 		return weeklyWorkHours > workHours + hours;
 	}
 
-	public List<Activity> getActs() {
-		return acts;
-	}
-
 	public int getRegisteredTime(Activity act) {
 		int i = 0;
 		for(Activity act1 : acts){
@@ -71,24 +67,25 @@ public class User {
 		return weeklyWorkHours;
 	}
 
-	public boolean RegisterTime(Date date, String name, int hours) {
+	public void RegisterTime(Date date, String name, int hours) {
 		Activity act;
 		if(name.equals("Holiday")){
 			act = new Activity("Holiday","TimeOff",date,date,hours);
 			holiday.add(act);
-		}else{
-			if(name.equals("Sick")){
+		}else if(name.equals("Sick")){
 				act = new Activity("Sick","TimeOff",date,date,hours);
 				sick.add(act);
-			}else{
+		}else{
 				for(int i = 0; i < acts.size();i++){
 					if(name.equals(acts.get(i).getName())){
 						registeredTime.set(i, registeredTime.get(i) + hours);
 					}
 				}
-				 
-			}
 		}
-		return hours > weeklyWorkHours;
+	}
+
+	public void addActivity(Activity activity) {
+		acts.add(activity);
+		registeredTime.add(0);
 	}
 }

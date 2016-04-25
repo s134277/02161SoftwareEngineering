@@ -7,35 +7,23 @@ import org.junit.Test;
 
 
 public class testCreateUser {
-
-
-
-	/** 
-	 * Tests the scenario when the administrator successfully logs in.
-	 * <ol>
-	 *  <li> The administrator logs in with the correct password
-	 * 	<li> The library application knows that the administrator is logged in
-	 * </ol>
-	 * @throws NoPasswordEnteredException 
-	 * @throws UserAlreadyExistsException 
-	 */
 	@Test
-	public void testCreateUserMichael123() throws UserAlreadyExistsException, NoPasswordEnteredException {
+	public void testCreateUserMichael123() throws Exception {
 		MAIN sys = new MAIN();
 		
-		// Step 1)
+		// Step 1) ingen brugere i systemet
 		List<User> users = sys.getUsers();
 		assertEquals(0, users.size());
 
-		// Step 2)
+		// Step 2) opretter bruger i systemet
 		User user = new User("Michael", "123",37);
-
 		sys.register(user);
+		
+
+		// Step 3) Checker om brugeren er oprettet i systemet
 		users = sys.getUsers();
-
-		// Step 3)
 		assertEquals(1, users.size());
-
+		
 		User registeredUser = users.get(0);
 		assertEquals("Michael", registeredUser.getName());
 		assertEquals("123", registeredUser.getPW());
@@ -45,7 +33,7 @@ public class testCreateUser {
 	public void testUsernameTaken() throws Exception {
 		MAIN sys = new MAIN();
 
-		//step 1
+		//step 1 
 		User user1 = new User("Michael","123",37);
 		sys.register(user1);
 		assertEquals(1, sys.getUsers().size());

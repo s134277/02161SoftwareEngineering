@@ -8,7 +8,9 @@ import org.junit.Test;
 
 public class testAddActivity{
 	@Test
-	public void TestAddActivity() throws NotProjectLeaderException, ActivityAlreadyExistsException, UserAlreadyExistsException, NoPasswordEnteredException, WrongCredentialsException, ProjectAlreadyExistsException{
+	public void TestAddActivity() throws Exception{
+		
+		//opretter system
 		MAIN sys = new MAIN();
 		Activity act = new Activity("testName","testActi",new Date(3,2016,sys),new Date(3,2017,sys),100);
 		
@@ -26,15 +28,17 @@ public class testAddActivity{
 		pro.addDev(dev);
 		pro.setProjectLeader(user);
 		
+
 		//checker om der er aktiviteter tilføjet
 		assertEquals(0,pro.getActivities().size());
 		
+		//tilføjer en aktivitet
 		pro.addActivity(act);
 		
 		//checker om aktiviteten er blevet tiføjet til projectet
 		assertEquals(1,pro.getActivities().size());
 		
-		
+		//tilføjer en developer
 		act.addDev(pro.findDev("Jonas"));
 		
 		//checker om dev er blevet added
@@ -42,6 +46,8 @@ public class testAddActivity{
 	}
 	@Test
 	public void TestAddActivityFail() throws Exception{
+		
+		//opretter system
 		MAIN sys = new MAIN();
 		User user = new User("Michael","123",37);
 		User dev = new User("Jonas","321",37);
@@ -58,8 +64,8 @@ public class testAddActivity{
 		pro.addDev(user);
 		pro.setProjectLeader(user);
 		
-		pro.addActivity(act);
 		
+		pro.addActivity(act);
 		//add aktivitet med samme navn
 		try{
 			pro.addActivity(act);

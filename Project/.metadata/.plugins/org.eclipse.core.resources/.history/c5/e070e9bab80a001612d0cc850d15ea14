@@ -1,0 +1,19 @@
+package projectManager;
+
+import org.junit.Test;
+
+
+public class TestRegisterTime {
+	@Test
+	public void testRegisterTime(){
+		MAIN sys = new MAIN();
+		
+		User user = new User("Michael","123",37);
+		User dev = new User("Jonas","321",37);
+		sys.register(user);
+		sys.register(dev);
+		
+		sys.login("Michael","123");
+		Date date = new Date(5,2016,sys);
+	}
+}

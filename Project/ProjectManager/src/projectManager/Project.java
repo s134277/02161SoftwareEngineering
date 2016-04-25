@@ -34,29 +34,17 @@ public class Project {
 	public void setTimeBudget(int timeBudget) {
 		this.timeBudget = timeBudget;
 	}
-	public User findDev(String name){
+	public User findDev(String name) throws UserNotFoundException{
 		for(User user : users){
 			if(name.equals(user.getName())) return user;
 		}
-		return null;
+		throw new UserNotFoundException("No user found","Find developer");
 	}
 	public void setProjectLeader(User dev) {
 		projectLeader = dev;
 	}
 	public String getName() {
 		return name;
-	}
-	public int getStartWeek() {
-		return startDate.getWeek();
-	}
-	public int getStartYear() {
-		return startDate.getYear();
-	}
-	public int getEndWeek() {
-		return endDate.getWeek();
-	}
-	public Object getEndYear() {
-		return endDate.getYear();
 	}
 	public int getTimeBudget() {
 		return timeBudget;
@@ -83,5 +71,10 @@ public class Project {
 	public List<Activity> getActivities() {
 		return acts;
 	}
-
+	public Date getStartDate(){
+		return startDate;
+	}
+	public Date getEndDate(){
+		return endDate;
+	}
 }

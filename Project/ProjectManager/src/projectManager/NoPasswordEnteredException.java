@@ -7,8 +7,4 @@ public class NoPasswordEnteredException extends Exception {
 		this.operation = operation;
 		
 	}
-
-	public String getOperation() {
-		return operation;
-	}
 }

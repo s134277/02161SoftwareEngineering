@@ -3,24 +3,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.List;
 import org.junit.Test;
 
 public class testRegisterTimeOff{
-	
-	/*
-	 * 1. Tests if a user can register one week of vacation (week 5 of 2016)
-	 * 
-	 * 2. Tests if a user can  register several weeks of vacation
-	 * 
-	 * 3. Tests if the system throws correct error if bad duration argument is entered
-	 * 
-	 * 4. Tests if the system throws correct error if registration conflicts with another activity
-	 */
-	
-	
 	@Test
-	public void testRegisterHoliday() throws UserAlreadyExistsException, NoPasswordEnteredException, WrongCredentialsException{
+	public void testRegisterHoliday() throws Exception{
+		//opretter systemet
 		MAIN sys = new MAIN();
 		
 		User user = new User("Michael","123",37);
@@ -37,11 +29,11 @@ public class testRegisterTimeOff{
 		assertTrue(user.isAvailable(4,2016,10));
 		
 		
-		//Registers holiday: (RegisterHoliday returns true if conflicts occur)
-		assertFalse(user.RegisterTime(date,"Holiday",user.getWeeklyWorkHours()));
+		//Registers holiday:
+		user.RegisterTime(date,"Holiday",user.getWeeklyWorkHours());
+		assertFalse(user.isAvailable(date.getWeek(), date.getYear(),user.getWeeklyWorkHours()));
 		
-		
-		//Asserts if the user is now unavailable in week 5 and available in week 4 and 6:
+		//Asserts if the user is now available in week 5 and available in week 4 and 6:
 		assertFalse(user.isAvailable(5,2016,10));
 		assertTrue(user.isAvailable(6,2016,10));
 		assertTrue(user.isAvailable(4,2016,10));
@@ -51,10 +43,14 @@ public class testRegisterTimeOff{
 		Date date3 = new Date(7,2016,sys);
 		Date date4 = new Date(8,2016,sys);
 		Date date5 = new Date(9,2016,sys);
-		assertFalse(user.RegisterTime(date2,"Holiday",user.getWeeklyWorkHours()));
-		assertFalse(user.RegisterTime(date3,"Holiday",user.getWeeklyWorkHours()));
-		assertFalse(user.RegisterTime(date4,"Holiday",user.getWeeklyWorkHours()));
-		assertFalse(user.RegisterTime(date5,"Holiday",user.getWeeklyWorkHours()));
+		user.RegisterTime(date2,"Holiday",user.getWeeklyWorkHours());
+		assertFalse(user.isAvailable(date2.getWeek(), date2.getYear(),user.getWeeklyWorkHours()));
+		user.RegisterTime(date3,"Holiday",user.getWeeklyWorkHours());
+		assertFalse(user.isAvailable(date3.getWeek(), date3.getYear(),user.getWeeklyWorkHours()));
+		user.RegisterTime(date4,"Holiday",user.getWeeklyWorkHours());
+		assertFalse(user.isAvailable(date4.getWeek(), date4.getYear(),user.getWeeklyWorkHours()));
+		user.RegisterTime(date5,"Holiday",user.getWeeklyWorkHours());
+		assertFalse(user.isAvailable(date4.getWeek(), date4.getYear(),user.getWeeklyWorkHours()));
 		
 		//Tests if the user is now unavailable during the holiday:
 		assertFalse(user.isAvailable(6,2016,10));
@@ -64,27 +60,59 @@ public class testRegisterTimeOff{
 		
 	}
 	
-	public void testRegisterHolidayConflict() throws NotProjectLeaderException, ActivityAlreadyExistsException{
+	@Test
+	public void testRegisterHolidayConflict() throws Exception{
+		//opretter systemet
 		MAIN sys = new MAIN();
-		
-		User user = sys.findDev("Michael");
+		User user = new User("Michael","123",37);
+		sys.register(user);
 		Date start = new Date(5,2016,sys);
 		Date end = new Date(6,2016,sys);
 		Date startDate = new Date(5,2016,sys);
-		Project pro = sys.findProject("testName");
+		Project pro = new Project("testName",sys);
+		sys.createProject(pro);
+		
+		//opretter mock server
+		DateServer dateServer = mock(DateServer.class);
+		sys.setDateServer(dateServer);
+		int[] d = new int[]{5,2017};
+		when(dateServer.getDate()).thenReturn(d);
+		
 		//scheduling a conflicting activity:
 		Activity act = new Activity("testName","testActi",start,end,100);
-		pro.addActivity(act);
+		sys.login("Michael","123");
 		pro.addDev(sys.findDev("Michael"));
+		pro.setProjectLeader(user);
+		pro.addActivity(act);
 		act.addDev(pro.findDev("Michael"));
+
+		user.RegisterTime(startDate,"Holiday",user.getWeeklyWorkHours());
+		assertFalse(user.isAvailable(startDate.getWeek(), startDate.getYear(),user.getWeeklyWorkHours()));
 		
-		/*
-		 * register holiday returns true/false, 
-		 * NOT depending on success of the registration, 
-		 * but to notify if there is a conflict between a holiday 
-		 * and a scheduled activity
-		 */
-		assertTrue(user.RegisterTime(startDate,"Holiday",user.getWeeklyWorkHours())); //returns true if conflict
+		
+		//tester for anden dato mock server
+		d = new int[]{5,2016};
+		when(dateServer.getDate()).thenReturn(d);
+		assertFalse(user.isAvailable(startDate.getWeek(), startDate.getYear(),user.getWeeklyWorkHours()));
 	}
-	
+	@Test
+	public void testRegisterSick() throws Exception{
+		//opretter system
+		MAIN sys = new MAIN();
+		
+		User user = new User("Michael","123",37);
+		User dev = new User("Jonas","321",37);
+		sys.register(user);
+		sys.register(dev);
+		
+		sys.login("Michael","123");
+		Date date = new Date(5,2016,sys);
+		
+		
+		//Registers sick: 
+		user.RegisterTime(date,"Sick",user.getWeeklyWorkHours());
+		assertFalse(user.isAvailable(date.getWeek(), date.getYear(),user.getWeeklyWorkHours()));
+		
+		
+	}
 }

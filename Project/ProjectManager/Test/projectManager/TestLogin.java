@@ -16,11 +16,13 @@ public class TestLogin {
 		User user = new User("Michael","123",37);
 		sys.register(user);
 		
+		//tjekker om nogen er logget ind
+		assertFalse(sys.getLoggedIn());
+		
 		//logger ind med bruger
 		Boolean loggedIn = sys.login("Michael","123");
 		assertTrue(loggedIn);
-		
-		// logger ud
+		//logger ud
 		loggedIn = sys.logOut();
 		assertFalse(loggedIn);
 		
