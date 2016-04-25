@@ -2,6 +2,7 @@ package Interface;
 
 import java.util.*;
 import projectManager.*;
+import projectManager.Date;
 
 public class Interface {
 	static menuManager mn = new menuManager();
@@ -26,8 +27,8 @@ public class Interface {
 				case 0: break;
 				case 1: viewProjects(); break;
 				case 2: createProject(); break;
-				case 3: break;
-				case 4: break;
+				case 3: break; //register time
+				case 4: break; //edit user
 				case 5: main.logOut(); break;
 			}
 		}
@@ -54,21 +55,85 @@ public class Interface {
 			// do nothing (no active projects)
 		} else if(choice == 0){
 			// do nothing (user cancelled)
-		} else{
-			viewSelectedProject(projects.get(choice-1));
-		}
+		} else viewSelectedProject(projects.get(choice-1));
 	}
 
 	private static void viewSelectedProject(Project project) {
-		int choice = mn.viewSelectedProject(project);
-		switch (choice){
-			case 0: break;//cancel
-			case 1: mn.displayProjectDetails(project); break;//project details
-			case 2: break;//add developer
-			case 3:	break;//add project leader
-			case 4: break;//add activity
-			case 5: break;//view/edit activities
+		boolean cancel = true;
+		while(cancel){
+			int choice = mn.viewSelectedProject(project);
+			switch (choice){
+				case 0: cancel = false; break;
+				case 1: mn.displayProjectDetails(project); break;
+				case 2: addDeveloper(project); break;
+				case 3:	addProjectLeader(project); break;
+				case 4: addActivity(project); break;
+				case 5: editActivity(project); break;
+			}
 		}
+	}
+
+	private static void editActivity(Project project) {
+		System.out.println("Activities:");
+		System.out.println("0. Cancel");
+		mn.printActivitiesAndDevelopers(project);
+		
+		int choice = mn.displayActivity();
+		
+		if(choice== 0){
+			//user as selected cancel
+		}else{
+			///// MISSING TO DO!
+		}
+		
+		
+		
+	}
+
+	private static void addActivity(Project project) {
+		String data[] = mn.addActivity();
+		
+		// Generating start end end-date from the data:
+		String[] start = data[2].split("\\.");
+		int startWeek = Integer.parseInt(start[0]);
+		int startYear = Integer.parseInt(start[1]);
+		
+		String[] end = data[3].split("\\.");
+		int endWeek = Integer.parseInt(end[0]);
+		int endYear = Integer.parseInt(end[1]);
+		
+		Date d1 = new Date(startWeek,startYear,main);
+		Date d2 = new Date(endWeek,endYear,main);
+		
+		// Generating timeBudget from data:
+		int timeBudget = Integer.parseInt(data[4]);
+		
+		Activity act = new Activity(data[0],data[1],d1,d2,timeBudget);
+		
+		try {
+			project.addActivity(act);
+			System.out.println("The activity " + data[0] + " has succesfully been added");
+		} catch (NotProjectLeaderException e) {
+			System.out.println(e.getMessage());
+		} catch (ActivityAlreadyExistsException e) {
+			System.out.println(e.getMessage());
+		}
+		
+	}
+
+	private static void addProjectLeader(Project project) {
+		String developer = mn.addDeveloper();
+		
+		project.setProjectLeader(main.findDev(developer));
+		System.out.println("Developer " + developer + " succesfully designated as project leader");
+		
+	}
+
+	private static void addDeveloper(Project project) {
+		String developer = mn.addDeveloper();
+		
+		project.addDev(main.findDev(developer));
+		System.out.println("Developer " + developer + " Succesfully added to project");
 		
 		
 	}

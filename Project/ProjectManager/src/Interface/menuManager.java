@@ -3,6 +3,8 @@ package Interface;
 import java.util.List;
 import java.util.Scanner;
 
+import projectManager.Activity;
+import projectManager.Date;
 import projectManager.MAIN;
 import projectManager.Project;
 import projectManager.User;
@@ -141,15 +143,73 @@ public class menuManager {
 		else System.out.println("Customer: " + project.getCostumer());
 		
 		if(project.getStartDate()==null) System.out.println("Start date: none yet");
-		else System.out.println("Start date: week " + project.getStartWeek() + " year " + project.getStartYear());
+		else System.out.println("Start date: week " + project.getStartDate().getWeek() + " year " + project.getStartDate().getYear());
 		
 		
 		if(project.getEndDate()==null) System.out.println("Deadline: No deadline yet");
-		else System.out.println("Deadline: week " + project.getEndWeek() + " year " + project.getEndYear());
+		else System.out.println("Deadline: week " + project.getEndDate().getWeek() + " year " + project.getEndDate().getYear());
 		
 		if(project.getTimeBudget()==0) System.out.println("Time budget: No time budget yet");
 		else System.out.println("Time budget: " + project.getTimeBudget());
 		
+		System.out.println("Activities:");
+		if(project.getActivities().isEmpty())System.out.println("No activities");
+		else printActivitiesAndDevelopers(project);
 		
+		
+	}
+
+	public void printActivitiesAndDevelopers(Project project) {
+		List<Activity> Activities = project.getActivities();
+		int index = 1;
+		for(Activity act : Activities){
+			System.out.println(index + ". " + act.getName());
+			index++;
+			if(act.getUsers().isEmpty()) System.out.println("   - No developers added");
+			else{
+				List<User> Developers = act.getUsers();
+				for(User dev : Developers){
+					System.out.println("   - " + dev.getName());
+				}
+			}
+		}
+	}
+
+	public String addDeveloper() {
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
+		System.out.println("Enter developer name:");
+		
+		String developer = in.nextLine();
+		
+		return developer;
+	}
+
+	public String[] addActivity() {
+		String data[] = new String[5];
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
+		System.out.println("Add activity:");
+		System.out.println("Enter activity name:");
+		data[0] = in.nextLine();
+		System.out.println("Enter description:");
+		data[1] = in.nextLine();
+		System.out.println("Enter start date: (format: ww.yyyy)");
+		data[2] = in.nextLine();
+		System.out.println("Enter end date: (format: ww.yyyy)");
+		data[3] = in.nextLine();
+		System.out.println("Enter time budget: (hours)");
+		data[4] = in.nextLine();
+		return data;
+	}
+
+	public int displayActivity() {
+		int choice = 0;
+		System.out.println("Select an activity from the list above:");
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
+		int i = in.nextInt();
+		
+		return choice;
 	}
 }
