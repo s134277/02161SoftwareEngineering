@@ -101,12 +101,14 @@ public class menuManager {
 		System.out.println("3. Add/change project leader");
 		System.out.println("4. Add adtivity");
 		System.out.println("5. View/edit activities");
+		System.out.println("6. Delete project");
+		System.out.println("7. Generate project report");
 		
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		int i = in.nextInt();
 		
-		if(i < 0 || i > 5) return 0;
+		if(i < 0 || i > 7) return 0;
 		else return i;
 		
 	}
@@ -203,7 +205,7 @@ public class menuManager {
 		return data;
 	}
 
-	public int displayActivity() {
+	public int selectActivity() {
 		int choice = 0;
 		System.out.println("Select an activity from the list above:");
 		@SuppressWarnings("resource")
@@ -211,5 +213,60 @@ public class menuManager {
 		int i = in.nextInt();
 		
 		return choice;
+	}
+
+	public int editActivity(Activity act) {
+		int choice = 0;
+		
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
+		System.out.println("Edit activity: (select an number to change the info)");
+		System.out.println("1. Name: " + act.getName());
+		System.out.println("2. Description: " + act.getInfo());
+		System.out.println("3. Start date: (format: ww.yyyy)" + act.getStartDate().getWeek()+"."+act.getStartDate().getYear());
+		System.out.println("4. End date: (format: ww.yyyy)" + act.getEndDate().getWeek()+"."+act.getEndDate().getYear());
+		System.out.println("5. Time budget: " + act.getTimeBudget());
+		choice = in.nextInt();
+		
+		if(choice < 0 || choice > 5) return 0;
+		else return choice; 
+	}
+
+	public int editUser() {
+		int choice = 0;
+		
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
+		
+		System.out.println("Edit user: 8select one)");
+		System.out.println("1. Change username");
+		System.out.println("2. Change password");
+		System.out.println("3. Change weekly work hours");
+		System.out.println("4. Delete user");
+		
+		choice = in.nextInt();
+		if(choice < 0 || choice > 4) return 0;
+		else return choice; 
+	}
+
+	public String setUsername() {
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
+		System.out.println("Enter new username:");
+		return in.nextLine();
+	}
+
+	public String setPW() {
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
+		System.out.println("Enter new password:");
+		return in.nextLine();
+	}
+
+	public int setWeeklyHours() {
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
+		System.out.println("Enter new password:");
+		return in.nextInt();
 	}
 }

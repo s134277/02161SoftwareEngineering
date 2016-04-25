@@ -28,10 +28,31 @@ public class Interface {
 				case 1: viewProjects(); break;
 				case 2: createProject(); break;
 				case 3: break; //register time
-				case 4: break; //edit user
+				case 4: editUser(); break; //edit user
 				case 5: main.logOut(); break;
 			}
 		}
+	}
+
+	private static void editUser() {
+		int choice = mn.editUser();
+		switch(choice){
+		case 0: break;
+		case 1:			
+			main.getCurrentUser().setName(mn.setUsername());
+			break;
+		case 2:
+			main.getCurrentUser().setPW(mn.setPW());
+			break;
+		case 3:
+			main.getCurrentUser().setWeeklyWorkHours(mn.setWeeklyHours());
+			break;
+		case 4:
+			main.getCurrentUser().delete();
+			break;
+		}
+		
+		
 	}
 
 	private static void createProject() {
@@ -69,8 +90,16 @@ public class Interface {
 				case 3:	addProjectLeader(project); break;
 				case 4: addActivity(project); break;
 				case 5: editActivity(project); break;
+				case 6: deleteProject(project); break;
+				case 7: generateProjectReport(project); break;
 			}
 		}
+	}
+
+	private static void deleteProject(Project project) {
+		main.deleteProject(project);
+		System.out.println("Project succesfully deleted!");
+		
 	}
 
 	private static void editActivity(Project project) {
@@ -78,16 +107,25 @@ public class Interface {
 		System.out.println("0. Cancel");
 		mn.printActivitiesAndDevelopers(project);
 		
-		int choice = mn.displayActivity();
+		int choice = mn.selectActivity();
 		
 		if(choice== 0){
-			//user as selected cancel
+			//user has selected cancel
 		}else{
-			///// MISSING TO DO!
+			Activity act = project.getActivities().get(choice-1);
+			int editChoice = -1;
+			while(editChoice != 0){
+				editChoice = mn.editActivity(act);
+				switch(editChoice){
+					case 0: break; // Cancel
+					case 1:	break; //name
+					case 2: break; //description
+					case 3: break; //start
+					case 4: break; //end
+					case 5: break; //budget
+				}
+			}
 		}
-		
-		
-		
 	}
 
 	private static void addActivity(Project project) {
@@ -118,24 +156,28 @@ public class Interface {
 		} catch (ActivityAlreadyExistsException e) {
 			System.out.println(e.getMessage());
 		}
-		
 	}
 
 	private static void addProjectLeader(Project project) {
 		String developer = mn.addDeveloper();
 		
-		project.setProjectLeader(main.findDev(developer));
+		try {
+			project.setProjectLeader(main.findDev(developer));
+		} catch (UserNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
 		System.out.println("Developer " + developer + " succesfully designated as project leader");
-		
 	}
 
 	private static void addDeveloper(Project project) {
 		String developer = mn.addDeveloper();
 		
-		project.addDev(main.findDev(developer));
+		try {
+			project.addDev(main.findDev(developer));
+		} catch (UserNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
 		System.out.println("Developer " + developer + " Succesfully added to project");
-		
-		
 	}
 
 	private static void createUser() throws Exception {
