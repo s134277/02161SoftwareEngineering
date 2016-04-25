@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><testrun name="testRegisterTimeOff" project="ProjectManager" tests="3" started="3" failures="0" errors="0" ignored="0">
-  <testsuite name="projectManager.testRegisterTimeOff" time="0.52">
-    <testcase name="testRegisterHolidayConflict" classname="projectManager.testRegisterTimeOff" time="0.52"/>
-    <testcase name="testRegisterSick" classname="projectManager.testRegisterTimeOff" time="0.0"/>
-    <testcase name="testRegisterHoliday" classname="projectManager.testRegisterTimeOff" time="0.0"/>
-  </testsuite>
-</testrun>

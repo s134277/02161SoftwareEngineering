@@ -21,7 +21,7 @@ public class TestRegisterTime {
 		
 		
 		//tjekker om brugeren har registreret noget tid
-		assertEquals(dev.getRegisteredTime(act),0);
+		assertEquals(dev.getRegisteredTime(act),0,1e15);
 		
 		
 		//opretter project og tilføjer aktiviteter
@@ -41,12 +41,12 @@ public class TestRegisterTime {
 		dev.RegisterTime(new Date(10,2016,sys), "test2Name", 10);
 		
 		//checker om projectet har registret tiden
-		assertEquals(act.getRemainingHours(),90);
-		assertEquals(act2.getRemainingHours(),90);
+		assertEquals(act.getRemainingHours(),90,1e15);
+		assertEquals(act2.getRemainingHours(),90,1e15);
 		
 		//ser om brugeren har registreret tiden
-		assertEquals(dev.getRegisteredTime(act),10);
-		assertEquals(dev.getRegisteredTime(act2),10);
+		assertEquals(dev.getRegisteredTime(act),10,1e15);
+		assertEquals(dev.getRegisteredTime(act2),10,1e15);
 		
 	}
 }

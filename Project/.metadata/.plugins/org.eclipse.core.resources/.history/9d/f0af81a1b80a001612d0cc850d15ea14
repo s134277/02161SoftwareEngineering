@@ -1,8 +1,0 @@
-package projectManager;
-
-import org.junit.Test;
-
-@Test
-public class TestRegisterTime {
-
-}

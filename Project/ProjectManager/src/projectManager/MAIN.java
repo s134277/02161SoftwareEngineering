@@ -31,9 +31,13 @@ public class MAIN {
 		users.add(user);
 	}
 
-	public Boolean login(String name, String PW) throws WrongCredentialsException {
-		User user = findDev(name); 
-		if(user == null) throw new WrongCredentialsException("Wrong Password or Username", "Login");
+	public Boolean login(String name, String PW) throws WrongCredentialsException, UserNotFoundException {
+		User user;
+		try{
+			user = findDev(name); 
+		}catch(UserNotFoundException e){
+			throw new WrongCredentialsException("Wrong Password or Username", "Login");
+		}
 		if(user.getPW().equals(PW)){
 			currentUser = user;
 			loggedIn = true;
@@ -42,11 +46,11 @@ public class MAIN {
 		}
 		return loggedIn;
 	}
-	public User findDev(String name){
+	public User findDev(String name) throws UserNotFoundException{
 		for(User user : users){
 			if(name.equals(user.getName())) return user;
 		}
-		return null;
+		throw new UserNotFoundException("No user found","Find developer");
 	}
 	public Boolean logOut() {
 		currentUser = null;
@@ -61,6 +65,7 @@ public class MAIN {
 			}
 		}
 		projects.add(pro);
+		pro.addDev(currentUser);
 	}
 
 	public List<Project> getProjects() {
@@ -85,6 +90,9 @@ public class MAIN {
 	public Date getDate() {
 		int[] d = dateServer.getDate();
 		return new Date(d[0],d[1],this);
+	}
+	public void deleteProject(Project pro) {
+		projects.remove(pro);
 	}
 
 	

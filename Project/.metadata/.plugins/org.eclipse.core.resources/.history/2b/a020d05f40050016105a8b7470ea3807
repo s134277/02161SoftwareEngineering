@@ -1,5 +1,0 @@
-package projectManager;
-
-public class ProjectAlreadyExistsException extends Exception {
-
-}

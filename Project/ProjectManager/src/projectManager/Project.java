@@ -11,7 +11,7 @@ public class Project {
 	private Date endDate;
 	private List<User> users = new ArrayList<User>();
 	private List<Activity> acts = new ArrayList<Activity>();
-	private int timeBudget;
+	private double timeBudget;
 	private User projectLeader;
 	
 	public Project(String name, MAIN sys) {
@@ -31,7 +31,7 @@ public class Project {
 	public void addDev(User user) {
 		users.add(user);
 	}
-	public void setTimeBudget(int timeBudget) {
+	public void setTimeBudget(double timeBudget) {
 		this.timeBudget = timeBudget;
 	}
 	public User findDev(String name) throws UserNotFoundException{
@@ -46,7 +46,7 @@ public class Project {
 	public String getName() {
 		return name;
 	}
-	public int getTimeBudget() {
+	public double getTimeBudget() {
 		return timeBudget;
 	}
 	public User getProjectLeader() {
@@ -76,5 +76,23 @@ public class Project {
 	}
 	public Date getEndDate(){
 		return endDate;
+	}
+	public List<User> getAvailableDev(Date date1, Date date2, double hours) {
+		List<User> devs = new ArrayList<User>();
+		for(User user : users){
+			int weeks = 0;
+			double workHours = 0;
+			Date start = date1;
+			Date end = date2;
+			while(start.before(end)){
+				workHours = workHours + user.getHours(start);
+				start = new Date(start.getWeek()+1,start.getYear(),sys);
+				weeks++;
+			}
+			if(workHours+hours <= user.getWeeklyWorkHours()*weeks){
+				devs.add(user);
+			}			
+		}
+		return devs;
 	}
 }

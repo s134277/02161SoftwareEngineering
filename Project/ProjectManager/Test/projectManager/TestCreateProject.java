@@ -59,10 +59,14 @@ public class TestCreateProject {
 		assertEquals(dev,pro.findDev("Jonas"));
 		
 		//Checker time budget
-		assertEquals(100,pro.getTimeBudget());
+		assertEquals(100,pro.getTimeBudget(),1e15);
 		
 		//checker projectleader
 		assertEquals(dev,pro.getProjectLeader());
+		
+		//Tester delete project
+		sys.deleteProject(pro);
+		assertEquals(sys.getProjects().size(),1);
 	}
 	
 	@Test

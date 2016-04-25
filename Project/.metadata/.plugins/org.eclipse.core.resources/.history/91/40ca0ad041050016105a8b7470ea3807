@@ -1,9 +1,0 @@
-package projectManager;
-
-public class Activity {
-
-	public Activity(String string, String string2, Date start, Date end, int i) {
-		// TODO Auto-generated constructor stub
-	}
-
-}

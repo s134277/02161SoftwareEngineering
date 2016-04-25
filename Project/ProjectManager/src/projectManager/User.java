@@ -6,13 +6,13 @@ import java.util.List;
 public class User {
 	private String name; 
 	private String PW; 
-	private int weeklyWorkHours;
+	private double weeklyWorkHours;
 	private List<Activity> acts = new ArrayList<Activity>();
-	private List<Integer> registeredTime = new ArrayList<Integer>();
+	private List<Double> registeredTime = new ArrayList<Double>();
 	private List<Activity> holiday = new ArrayList<Activity>();
 	private List<Activity> sick = new ArrayList<Activity>();
 	
-	public User(String name, String PW,int weeklyWorkHours) {
+	public User(String name, String PW,double weeklyWorkHours) {
 		this.name = name;
 		this.PW = PW;
 		this.weeklyWorkHours = weeklyWorkHours;
@@ -26,8 +26,51 @@ public class User {
 		return PW;
 	}
 
-	public boolean isAvailable(int week, int year,int hours) {
-		int workHours=0;
+	public boolean isAvailable(Date date,double hours) {
+		return weeklyWorkHours > getHours(date) + hours;
+	}
+
+	public double getRegisteredTime(Activity act) {
+		int i = 0;
+		for(Activity act1 : acts){
+			if(act.getName().equals(act1.getName())) {
+				return registeredTime.get(i);
+			}
+			i++;
+		}
+		return 0;
+	}
+
+	public double getWeeklyWorkHours() {
+		return weeklyWorkHours;
+	}
+
+	public void RegisterTime(Date date, String name, double hours) {
+		Activity act;
+		if(name.equals("Holiday")){
+			act = new Activity("Holiday","TimeOff",date,date,hours);
+			holiday.add(act);
+		}else if(name.equals("Sick")){
+				act = new Activity("Sick","TimeOff",date,date,hours);
+				sick.add(act);
+		}else{
+				for(int i = 0; i < acts.size();i++){
+					if(name.equals(acts.get(i).getName())){
+						registeredTime.set(i, registeredTime.get(i) + hours);
+					}
+				}
+		}
+	}
+
+	public void addActivity(Activity activity) {
+		acts.add(activity);
+		registeredTime.add((double)0);
+	}
+
+	public double getHours(Date start){
+		double workHours=0;
+		int week = start.getWeek();
+		int year = start.getYear();
 		for(Activity h : holiday){
 			if(year >= h.getStartDate().getYear() && year <= h.getEndDate().getYear()){
 				if(week >= h.getStartDate().getWeek() && week <= h.getEndDate().getWeek()){
@@ -49,43 +92,6 @@ public class User {
 				}
 			}
 		}
-		return weeklyWorkHours > workHours + hours;
-	}
-
-	public int getRegisteredTime(Activity act) {
-		int i = 0;
-		for(Activity act1 : acts){
-			if(act.getName().equals(act1.getName())) {
-				return registeredTime.get(i);
-			}
-			i++;
-		}
-		return 0;
-	}
-
-	public int getWeeklyWorkHours() {
-		return weeklyWorkHours;
-	}
-
-	public void RegisterTime(Date date, String name, int hours) {
-		Activity act;
-		if(name.equals("Holiday")){
-			act = new Activity("Holiday","TimeOff",date,date,hours);
-			holiday.add(act);
-		}else if(name.equals("Sick")){
-				act = new Activity("Sick","TimeOff",date,date,hours);
-				sick.add(act);
-		}else{
-				for(int i = 0; i < acts.size();i++){
-					if(name.equals(acts.get(i).getName())){
-						registeredTime.set(i, registeredTime.get(i) + hours);
-					}
-				}
-		}
-	}
-
-	public void addActivity(Activity activity) {
-		acts.add(activity);
-		registeredTime.add(0);
+		return workHours;
 	}
 }
