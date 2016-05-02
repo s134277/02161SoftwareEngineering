@@ -1,13 +1,18 @@
 package Interface;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import projectManager.Activity;
+import projectManager.MAIN;
 import projectManager.Project;
 import projectManager.User;
+import projectManager.UserNotFoundException;
 
 public class menuManager {
+	
+	static userInput ui = new userInput();
 	
 	public int printWelcomeMenu(){
 		@SuppressWarnings("resource")
@@ -61,32 +66,23 @@ public class menuManager {
 		}
 	}
 
-	public int viewSelectedProject(Project project) {
+	public int viewSelectedProject(Project project,boolean isLeader) {
 		System.out.println("Project: " + project.getName());
 		System.out.println("Options:");
 		System.out.println("0. Cancel(return)");
 		System.out.println("1. View project details");
 		System.out.println("2. Add developers");
 		System.out.println("3. Add/change project leader");
-		/**
-		 * 
-		 * 
-		 * options 4-7 should only be shown to project leaders
-		 * 
-		 * 
-		 */
-		
+		if(isLeader){
 		System.out.println("4. Add activity");
 		System.out.println("5. View/edit activities");
 		System.out.println("6. Delete project");
 		System.out.println("7. Generate project report");
+		return ui.intInputInterval("a number", 7);
+		}else
+			return ui.intInputInterval("a number", 3);
 		
-		@SuppressWarnings("resource")
-		Scanner in = new Scanner(System.in);
-		int i = in.nextInt();
 		
-		if(i < 0 || i > 7) return 0;
-		else return i;
 	}
 
 	public String createProject() {
@@ -179,51 +175,46 @@ public class menuManager {
 		if(choice < 0 || choice > 4) return 0;
 		else return choice; 
 	}
-	
-	public int intInput(String type,int original){
-		@SuppressWarnings("resource")
-		Scanner in = new Scanner(System.in);
-		System.out.println("Enter " + type + ":");
-		String input = in.nextLine();
-		
-		//checks correctness of input:
-		if(input.isEmpty()){
-			System.out.println("No input entered, nothing is changed");
-			return original;
+
+	public Activity selectUserRelatedActivity(Project proj, User user) {
+		List<Activity> Activities = proj.getActivities();
+		int index = 1;
+		for(Activity act : Activities){
+			System.out.println(index + ". " + act.getName() + " : " + user.getRegisteredTime(act));
+			index++;
 		}
 		
-		try{
-			int newInt = Integer.parseInt(input);
-			return newInt;
-		} catch(Exception e){
-			System.out.println("You entered something that wasn't an integer when an integer was expected");
-			System.out.println("Nothing is changed or defaultvalue selected");
-			return original;
-		}
+		int choice = ui.intInputInterval("an activity number", index-1);
+		
+		return Activities.get(choice);
+		
 	}
-	
-	public String stringInput(String type){
-		@SuppressWarnings("resource")
-		Scanner in = new Scanner(System.in);
-		System.out.println("Enter " + type + ":");
-		String input = in.nextLine();
+
+	public Project selectUserRelatedProject(MAIN main) {
+		User user = main.getCurrentUser();
 		
+		List<Project> projects = new ArrayList<Project>();
+		for(Project proj : main.getProjects()){
+			try{
+				proj.findDev(user.getName());
+				projects.add(proj);
+			}catch(UserNotFoundException e){
+				continue;
+			}
+		}
 		
-		//checks correctness of input:
-		if(input.isEmpty()){
-			System.out.println("No input entered, nothing is changed");
+		if(projects.isEmpty()){
+			System.out.println("You are not registered with any projects yet");
 			return null;
 		}
 		
-		try{
-			@SuppressWarnings("unused")
-			int testInt = Integer.parseInt(input);
-			System.out.println("You entered an integer when a string was expected");
-			System.out.println("Nothing is changed");
-			return null;
-		} catch(Exception e){
-			return input;
+		System.out.println("Projects you are associated with:");
+		int index = 1;
+		for(Project proj : projects){
+			System.out.println(index + ". " + proj.getName());
 		}
+		int selection = ui.intInputInterval("a project number", index-1);
+		return projects.get(selection-1);
 	}
-	
+
 }
