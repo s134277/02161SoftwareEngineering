@@ -94,4 +94,18 @@ public class User {
 		}
 		return workHours;
 	}
+
+	public void setName(String setUsername) {
+		this.name = setUsername;
+	}
+
+	public void setPW(String setPW) {
+		this.PW = setPW;
+		
+	}
+
+	public void setWeeklyWorkHours(int setWeeklyHours) {
+		this.weeklyWorkHours = setWeeklyHours;
+		
+	}
 }

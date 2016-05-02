@@ -95,4 +95,8 @@ public class Project {
 		}
 		return devs;
 	}
+	
+	public void deleteActivity(Activity act){
+		this.acts.remove(act);
+	}
 }

@@ -4,11 +4,8 @@ import java.util.List;
 import java.util.Scanner;
 
 import projectManager.Activity;
-import projectManager.Date;
-import projectManager.MAIN;
 import projectManager.Project;
 import projectManager.User;
-import projectManager.UserAlreadyExistsException;
 
 public class menuManager {
 	
@@ -27,32 +24,6 @@ public class menuManager {
 		else return i;
 	}
 
-	public String[] login() {
-		@SuppressWarnings("resource")
-		Scanner in = new Scanner(System.in);
-		System.out.println("Log in menu:");
-		System.out.println("Enter username:");
-		String username = in.nextLine(); 
-		System.out.println("Enter password:");
-		String password = in.next();
-		
-		return new String[]{username,password};
-	}
-
-	public String[] createUser(){
-		@SuppressWarnings("resource")
-		Scanner in = new Scanner(System.in);
-		System.out.println("Create user menu:");
-		System.out.println("Enter desired username:");
-		String username = in.nextLine(); 
-		System.out.println("Enter desired password:");
-		String password = in.next();
-		System.out.println("Enter your weekly workhour maximum:");
-		int i = in.nextInt();
-		String workHours = ""+i;
-		return new String[]{username,password,workHours};
-	}
-
 	public int printMainMenu() {
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
@@ -68,8 +39,6 @@ public class menuManager {
 	}
 
 	public int viewProjects(List<Project> projects) {
-		
-		
 		if(projects.isEmpty()){ 
 			System.out.println("No active projects found!");
 			return -1;
@@ -99,7 +68,15 @@ public class menuManager {
 		System.out.println("1. View project details");
 		System.out.println("2. Add developers");
 		System.out.println("3. Add/change project leader");
-		System.out.println("4. Add adtivity");
+		/**
+		 * 
+		 * 
+		 * options 4-7 should only be shown to project leaders
+		 * 
+		 * 
+		 */
+		
+		System.out.println("4. Add activity");
 		System.out.println("5. View/edit activities");
 		System.out.println("6. Delete project");
 		System.out.println("7. Generate project report");
@@ -110,7 +87,6 @@ public class menuManager {
 		
 		if(i < 0 || i > 7) return 0;
 		else return i;
-		
 	}
 
 	public String createProject() {
@@ -118,47 +94,19 @@ public class menuManager {
 		Scanner in = new Scanner(System.in);
 		System.out.println("Project name:");
 		return in.nextLine();
-//		System.out.println("Customer:");
-//		data[1] = in.nextLine();
-//		if(data[1].isEmpty()) data[1] = "Software Huset A/S";
-//		
-//		System.out.println("Start date: (format: ww.yyyy)");
-//		data[2] = in.nextLine();
-//		
-//		System.out.println("End date: (format: ww.yyyy)");
-//		data[3] = in.nextLine();
-//		
-//		System.out.println("Time budget: (hours)");
-//		data[4] = in.nextLine();
-		
-		
-		
 	}
 
-	public void displayProjectDetails(Project project) {
+	public void displayProjectDetails(Project project,reportManager rm) {
+		
 		System.out.println("Details for project: " + project.getName());
-		
-		if(project.getProjectLeader()==null) System.out.println("Project leader: none");
-		else System.out.println("Project leader: " + project.getProjectLeader().getName());
-		
-		if(project.getCostumer()==null) System.out.println("Customer: Software Huset A/S");
-		else System.out.println("Customer: " + project.getCostumer());
-		
-		if(project.getStartDate()==null) System.out.println("Start date: none yet");
-		else System.out.println("Start date: week " + project.getStartDate().getWeek() + " year " + project.getStartDate().getYear());
-		
-		
-		if(project.getEndDate()==null) System.out.println("Deadline: No deadline yet");
-		else System.out.println("Deadline: week " + project.getEndDate().getWeek() + " year " + project.getEndDate().getYear());
-		
-		if(project.getTimeBudget()==0) System.out.println("Time budget: No time budget yet");
-		else System.out.println("Time budget: " + project.getTimeBudget());
+		String[] projectInfo = rm.generateHeader(project);
+		for(String s : projectInfo){
+			System.out.println(s);
+		}
 		
 		System.out.println("Activities:");
 		if(project.getActivities().isEmpty())System.out.println("No activities");
 		else printActivitiesAndDevelopers(project);
-		
-		
 	}
 
 	public void printActivitiesAndDevelopers(Project project) {
@@ -175,16 +123,6 @@ public class menuManager {
 				}
 			}
 		}
-	}
-
-	public String addDeveloper() {
-		@SuppressWarnings("resource")
-		Scanner in = new Scanner(System.in);
-		System.out.println("Enter developer name:");
-		
-		String developer = in.nextLine();
-		
-		return developer;
 	}
 
 	public String[] addActivity() {
@@ -205,30 +143,23 @@ public class menuManager {
 		return data;
 	}
 
-	public int selectActivity() {
-		int choice = 0;
-		System.out.println("Select an activity from the list above:");
-		@SuppressWarnings("resource")
-		Scanner in = new Scanner(System.in);
-		int i = in.nextInt();
-		
-		return choice;
-	}
-
 	public int editActivity(Activity act) {
 		int choice = 0;
 		
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		System.out.println("Edit activity: (select an number to change the info)");
+		System.out.println("0. Cancel");
 		System.out.println("1. Name: " + act.getName());
-		System.out.println("2. Description: " + act.getInfo());
-		System.out.println("3. Start date: (format: ww.yyyy)" + act.getStartDate().getWeek()+"."+act.getStartDate().getYear());
-		System.out.println("4. End date: (format: ww.yyyy)" + act.getEndDate().getWeek()+"."+act.getEndDate().getYear());
+		System.out.println("2. Description: " + act.getDescription());
+		System.out.println("3. Start date: " + act.getStartDate().getWeek()+"."+act.getStartDate().getYear() + "(format: ww.yyyy)");
+		System.out.println("4. End date: " + act.getEndDate().getWeek()+"."+act.getEndDate().getYear() + "(format: ww.yyyy)");
 		System.out.println("5. Time budget: " + act.getTimeBudget());
+		System.out.println("6. Add developer");
+		System.out.println("7. Delete activity");
 		choice = in.nextInt();
 		
-		if(choice < 0 || choice > 5) return 0;
+		if(choice < 0 || choice > 7) return 0;
 		else return choice; 
 	}
 
@@ -248,25 +179,51 @@ public class menuManager {
 		if(choice < 0 || choice > 4) return 0;
 		else return choice; 
 	}
-
-	public String setUsername() {
+	
+	public int intInput(String type,int original){
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
-		System.out.println("Enter new username:");
-		return in.nextLine();
+		System.out.println("Enter " + type + ":");
+		String input = in.nextLine();
+		
+		//checks correctness of input:
+		if(input.isEmpty()){
+			System.out.println("No input entered, nothing is changed");
+			return original;
+		}
+		
+		try{
+			int newInt = Integer.parseInt(input);
+			return newInt;
+		} catch(Exception e){
+			System.out.println("You entered something that wasn't an integer when an integer was expected");
+			System.out.println("Nothing is changed or defaultvalue selected");
+			return original;
+		}
 	}
-
-	public String setPW() {
+	
+	public String stringInput(String type){
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
-		System.out.println("Enter new password:");
-		return in.nextLine();
+		System.out.println("Enter " + type + ":");
+		String input = in.nextLine();
+		
+		
+		//checks correctness of input:
+		if(input.isEmpty()){
+			System.out.println("No input entered, nothing is changed");
+			return null;
+		}
+		
+		try{
+			@SuppressWarnings("unused")
+			int testInt = Integer.parseInt(input);
+			System.out.println("You entered an integer when a string was expected");
+			System.out.println("Nothing is changed");
+			return null;
+		} catch(Exception e){
+			return input;
+		}
 	}
-
-	public int setWeeklyHours() {
-		@SuppressWarnings("resource")
-		Scanner in = new Scanner(System.in);
-		System.out.println("Enter new password:");
-		return in.nextInt();
-	}
+	
 }

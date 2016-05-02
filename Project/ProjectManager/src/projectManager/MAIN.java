@@ -1,7 +1,6 @@
 package projectManager;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class MAIN {
@@ -94,6 +93,9 @@ public class MAIN {
 	public void deleteProject(Project pro) {
 		projects.remove(pro);
 	}
-
+	
+	public void deleteGlobalUser(User user){
+		this.users.remove(user);
+	}
 	
 }

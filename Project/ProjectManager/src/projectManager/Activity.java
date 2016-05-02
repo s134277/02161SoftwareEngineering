@@ -18,6 +18,27 @@ public class Activity {
 		this.endDate = endDate;
 		this.timeBudget = timeBudget;
 	}
+	
+	public void setName(String name){
+		this.name = name;
+	}
+	
+	public void setDescription(String description){
+		this.description = description;
+	}
+	
+	public void setStartDate(Date start){
+		this.startDate = start;
+	}
+	
+	public void setEndDate(Date end){
+		this.endDate = end;
+	}
+	
+	public void setTimebudget(int budget){
+		this.timeBudget = budget;
+	}
+	
 	public void addDev(User dev) {
 		users.add(dev);
 		dev.addActivity(this);
@@ -34,6 +55,11 @@ public class Activity {
 	public Date getEndDate() {
 		return endDate;
 	}
+	
+	public String getDescription(){
+		return description;
+	}
+	
 	public double getRemainingHours() {
 		double hours = 0;
 		for(User user : users){
