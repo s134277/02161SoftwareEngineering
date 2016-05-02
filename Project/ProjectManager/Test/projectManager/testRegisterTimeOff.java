@@ -35,7 +35,7 @@ public class testRegisterTimeOff{
 		
 		
 		//Registers holiday:
-		user.RegisterTime(date,"Holiday",user.getWeeklyWorkHours());
+		user.RegisterTime(date,null,"Holiday",user.getWeeklyWorkHours());
 		assertFalse(user.isAvailable(date,user.getWeeklyWorkHours()));
 		
 		//Asserts if the user is now available in week 5 and available in week 4 and 6:
@@ -46,13 +46,13 @@ public class testRegisterTimeOff{
 		
 		//Registers holiday in week 6-9:
 		
-		user.RegisterTime(date2,"Holiday",user.getWeeklyWorkHours());
+		user.RegisterTime(date2,null,"Holiday",user.getWeeklyWorkHours());
 		assertFalse(user.isAvailable(date2,user.getWeeklyWorkHours()));
-		user.RegisterTime(date3,"Holiday",user.getWeeklyWorkHours());
+		user.RegisterTime(date3,null,"Holiday",user.getWeeklyWorkHours());
 		assertFalse(user.isAvailable(date3,user.getWeeklyWorkHours()));
-		user.RegisterTime(date4,"Holiday",user.getWeeklyWorkHours());
+		user.RegisterTime(date4,null,"Holiday",user.getWeeklyWorkHours());
 		assertFalse(user.isAvailable(date4,user.getWeeklyWorkHours()));
-		user.RegisterTime(date5,"Holiday",user.getWeeklyWorkHours());
+		user.RegisterTime(date5,null,"Holiday",user.getWeeklyWorkHours());
 		assertFalse(user.isAvailable(date4,user.getWeeklyWorkHours()));
 		
 		//Tests if the user is now unavailable during the holiday:
@@ -72,14 +72,18 @@ public class testRegisterTimeOff{
 		Date start = new Date(5,2016,sys);
 		Date end = new Date(6,2016,sys);
 		Date startDate = new Date(5,2016,sys);
-		Project pro = new Project("testName",sys);
-		
 		
 		//opretter mock server
 		DateServer dateServer = mock(DateServer.class);
 		sys.setDateServer(dateServer);
 		int[] d = new int[]{5,2017};
 		when(dateServer.getDate()).thenReturn(d);
+		
+		
+		Project pro = new Project("testName",sys);
+		
+		
+		
 		
 		//scheduling a conflicting activity:
 		Activity act = new Activity("testName","testActi",start,end,100);
@@ -90,7 +94,7 @@ public class testRegisterTimeOff{
 		pro.addActivity(act);
 		act.addDev(pro.findDev("Michael"));
 
-		user.RegisterTime(startDate,"Holiday",user.getWeeklyWorkHours());
+		user.RegisterTime(startDate,null,"Holiday",user.getWeeklyWorkHours());
 		assertFalse(user.isAvailable(startDate,user.getWeeklyWorkHours()));
 		
 		
@@ -114,7 +118,7 @@ public class testRegisterTimeOff{
 		
 		
 		//Registers sick: 
-		user.RegisterTime(date,"Sick",user.getWeeklyWorkHours());
+		user.RegisterTime(date,null,"Sick",user.getWeeklyWorkHours());
 		assertFalse(user.isAvailable(date,user.getWeeklyWorkHours()));
 		
 		

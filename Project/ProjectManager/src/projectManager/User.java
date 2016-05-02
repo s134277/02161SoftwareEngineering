@@ -45,20 +45,28 @@ public class User {
 		return weeklyWorkHours;
 	}
 
-	public void RegisterTime(Date date, String name, double hours) {
-		Activity act;
-		if(name.equals("Holiday")){
-			act = new Activity("Holiday","TimeOff",date,date,hours);
-			holiday.add(act);
-		}else if(name.equals("Sick")){
+	public void RegisterTime(Date date, Project pro, String name, double hours) {
+		Activity act = null;
+		if(pro == null){
+			if(name.equals("Holiday")){
+				act = new Activity("Holiday","TimeOff",date,date,hours);
+				holiday.add(act);
+			}else if(name.equals("Sick")){
 				act = new Activity("Sick","TimeOff",date,date,hours);
 				sick.add(act);
+			}
 		}else{
-				for(int i = 0; i < acts.size();i++){
-					if(name.equals(acts.get(i).getName())){
-						registeredTime.set(i, registeredTime.get(i) + hours);
-					}
+			for(int i = 0; i < pro.getActivities().size(); i++){
+				if(name.equals(pro.getActivities().get(i).getName())){
+					act = pro.getActivities().get(i);
+					break;
 				}
+			}
+			for(int i = 0; i < acts.size(); i++){
+				if(act.equals(acts.get(i))){
+					registeredTime.set(i, registeredTime.get(i) + hours);
+				}
+			}
 		}
 	}
 
@@ -104,8 +112,11 @@ public class User {
 		
 	}
 
-	public void setWeeklyWorkHours(int setWeeklyHours) {
+	public void setWeeklyWorkHours(double setWeeklyHours) {
 		this.weeklyWorkHours = setWeeklyHours;
 		
+	}
+	public List<Activity> getActivities(){
+		return acts;
 	}
 }

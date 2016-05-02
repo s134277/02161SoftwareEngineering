@@ -17,6 +17,7 @@ public class TestRegisterTime {
 		User dev = new User("Jonas","321",37);
 		sys.register(user);
 		sys.register(dev);
+		sys.setDateServer(new DateServer());
 		sys.login("Michael","123");
 		
 		
@@ -37,8 +38,8 @@ public class TestRegisterTime {
 		act2.addDev(dev);
 		
 		// registrere tid
-		dev.RegisterTime(new Date(10,2016,sys), "testName", 10);
-		dev.RegisterTime(new Date(10,2016,sys), "test2Name", 10);
+		dev.RegisterTime(new Date(10,2016,sys),pro, "testName", 10);
+		dev.RegisterTime(new Date(10,2016,sys),pro, "test2Name", 10);
 		
 		//checker om projectet har registret tiden
 		assertEquals(act.getRemainingHours(),90,1e15);

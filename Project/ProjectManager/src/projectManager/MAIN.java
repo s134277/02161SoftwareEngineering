@@ -9,6 +9,7 @@ public class MAIN {
 	private List<Project> projects = new ArrayList<Project>();
 	private User currentUser = null;
 	private boolean loggedIn = false;
+	private int projectNumber = 0;
 	
 	public MAIN(){
 		
@@ -65,6 +66,7 @@ public class MAIN {
 		}
 		projects.add(pro);
 		pro.addDev(currentUser);
+		projectNumber++;
 	}
 
 	public List<Project> getProjects() {
@@ -96,6 +98,9 @@ public class MAIN {
 	
 	public void deleteGlobalUser(User user){
 		this.users.remove(user);
+	}
+	public int getProjectNumber() {
+		return projectNumber;
 	}
 	
 }

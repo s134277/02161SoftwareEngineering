@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Project {
+	private String ID; 
 	private MAIN sys;
 	private String name;
 	private String costumer = "Softwarehuset A/S";
@@ -17,6 +18,7 @@ public class Project {
 	public Project(String name, MAIN sys) {
 		this.name = name;
 		this.sys = sys;
+		ID = sys.getDate().getYear()+String.format("%05d", sys.getProjectNumber());
 	}
 	public void setCostumer(String costumer) {
 		this.costumer = costumer;
@@ -97,6 +99,12 @@ public class Project {
 	}
 	
 	public void deleteActivity(Activity act){
+		for(User user : act.getUsers()){
+			
+		}
 		this.acts.remove(act);
+	}
+	public String getProjectID(){
+		return ID;
 	}
 }

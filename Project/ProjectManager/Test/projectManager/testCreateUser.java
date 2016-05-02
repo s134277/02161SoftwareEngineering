@@ -69,6 +69,28 @@ public class testCreateUser {
 					.getMessage());
 		}
 	}
-	
+	@Test
+	public void testEditUser() throws Exception {
+		MAIN sys = new MAIN();
+		// Step 2) opretter bruger i systemet
+		User user = new User("Michael", "123",37);
+		sys.register(user);
+		
+		//new user values
+		String newName = "Michaela";
+		String newPW = "321";
+		double newWWH = 40;
+		
+		//setting new values
+		user.setName(newName);
+		user.setPW(newPW);
+		user.setWeeklyWorkHours(newWWH);
+		
+		//checking new values
+		assertEquals(newName,user.getName());
+		assertEquals(newPW,user.getPW());
+		assertEquals(newWWH,user.getWeeklyWorkHours(),1e17);
+		
+	}
 	
 }

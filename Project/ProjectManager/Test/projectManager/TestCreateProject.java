@@ -15,6 +15,7 @@ public class TestCreateProject {
 		sys.register(user);
 		User dev = new User("Jonas","321",37);
 		sys.register(dev);
+		sys.setDateServer(new DateServer());
 		
 				
 		//logger ind med bruger
@@ -77,6 +78,7 @@ public class TestCreateProject {
 		sys.register(user);
 		User dev = new User("Jonas","321",37);
 		sys.register(dev);
+		sys.setDateServer(new DateServer());
 				
 		//logger ind med bruger
 		Boolean loggedIn = sys.login("Michael","123");
