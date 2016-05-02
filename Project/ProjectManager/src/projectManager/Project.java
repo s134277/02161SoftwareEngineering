@@ -18,7 +18,7 @@ public class Project {
 	public Project(String name, MAIN sys) {
 		this.name = name;
 		this.sys = sys;
-		ID = sys.getDate().getYear()+String.format("%05d", sys.getProjectNumber());
+		ID = sys.getDate().getYear()+String.format("%04d", sys.getProjectNumber());
 	}
 	public void setCostumer(String costumer) {
 		this.costumer = costumer;
@@ -100,7 +100,7 @@ public class Project {
 	
 	public void deleteActivity(Activity act){
 		for(User user : act.getUsers()){
-			
+			user.getActivities().remove(act);
 		}
 		this.acts.remove(act);
 	}

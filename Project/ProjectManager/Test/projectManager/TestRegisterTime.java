@@ -41,13 +41,13 @@ public class TestRegisterTime {
 		dev.RegisterTime(new Date(10,2016,sys),pro, "testName", 10);
 		dev.RegisterTime(new Date(10,2016,sys),pro, "test2Name", 10);
 		
+		//N1 
 		//checker om projectet har registret tiden
-		assertEquals(act.getRemainingHours(),90,1e15);
-		assertEquals(act2.getRemainingHours(),90,1e15);
-		
+		assertEquals(act.getRemainingHours(),90,1e15);//N11
+		assertEquals(act2.getRemainingHours(),90,1e15);//N12
 		//ser om brugeren har registreret tiden
-		assertEquals(dev.getRegisteredTime(act),10,1e15);
-		assertEquals(dev.getRegisteredTime(act2),10,1e15);
+		assertEquals(dev.getRegisteredTime(act),10,1e15); //N13
+		assertEquals(dev.getRegisteredTime(act2),10,1e15); //N14
 		
 	}
 }

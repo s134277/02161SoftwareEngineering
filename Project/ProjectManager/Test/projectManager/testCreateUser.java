@@ -11,19 +11,18 @@ public class testCreateUser {
 	public void testCreateUserMichael123() throws Exception {
 		MAIN sys = new MAIN();
 		
-		// Step 1) ingen brugere i systemet
+		// B1 - ingen brugere i systemet
 		List<User> users = sys.getUsers();
 		assertEquals(0, users.size());
 
-		// Step 2) opretter bruger i systemet
+		//B2 - opretter bruger i systemet
 		User user = new User("Michael", "123",37);
 		sys.register(user);
-		
-
-		// Step 3) Checker om brugeren er oprettet i systemet
+		// Checker om brugeren er oprettet i systemet
 		users = sys.getUsers();
 		assertEquals(1, users.size());
 		
+		// testing get and set
 		User registeredUser = users.get(0);
 		assertEquals("Michael", registeredUser.getName());
 		assertEquals("123", registeredUser.getPW());
@@ -36,11 +35,11 @@ public class testCreateUser {
 		//step 1 
 		User user1 = new User("Michael","123",37);
 		sys.register(user1);
-		assertEquals(1, sys.getUsers().size());
 		
 		//step 2
 		User user2 = new User("Michael","123",37);
 
+		//C1
 		try {
 			sys.register(user2);
 			fail("An UserAlreadyExistsException should have been thrown");
@@ -58,7 +57,8 @@ public class testCreateUser {
 		MAIN sys = new MAIN();
 		
 		User user = new User("Jonas","",37);
-
+		
+		// D1
 		try {
 			sys.register(user);
 			fail("An NoPasswordEnteredException should have been thrown");
@@ -71,6 +71,8 @@ public class testCreateUser {
 	}
 	@Test
 	public void testEditUser() throws Exception {
+		//testing get and set for edit user
+		
 		MAIN sys = new MAIN();
 		// Step 2) opretter bruger i systemet
 		User user = new User("Michael", "123",37);
@@ -90,6 +92,11 @@ public class testCreateUser {
 		assertEquals(newName,user.getName());
 		assertEquals(newPW,user.getPW());
 		assertEquals(newWWH,user.getWeeklyWorkHours(),1e17);
+		
+		//test delete user
+		sys.deleteGlobalUser(user);
+		
+		assertEquals(0,sys.getUsers().size());
 		
 	}
 	

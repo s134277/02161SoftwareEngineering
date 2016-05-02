@@ -29,16 +29,16 @@ public class testDate{
 		Date d4 = new Date(1,2016,sys);
 		Date d5 = new Date(2,2017,sys);
 		
-		//tester denne dato mod idag
-		assertTrue(d1.afterToday());
-		assertFalse(d4.afterToday());
-		assertFalse(d3.afterToday());
+		// J1 - tester dato mod idag
+		assertTrue(d1.afterToday()); //J11
+		assertFalse(d4.afterToday()); //J12
+		assertFalse(d3.afterToday()); //J13
 		
-		//tester to datoer mod hinanden
-		assertTrue(d1.before(d2));
-		assertTrue(d1.before(d5));
-		assertFalse(d1.before(d1));
-		assertFalse(d1.before(d3));
+		// J2 - tester to datoer mod hinanden
+		assertTrue(d1.before(d2)); //J21
+		assertTrue(d1.before(d5)); //J22
+		assertFalse(d1.before(d1)); //J23
+		assertFalse(d1.before(d3)); //J24
 		
 		
 	}

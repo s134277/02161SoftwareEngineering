@@ -21,26 +21,22 @@ public class TestCreateProject {
 		//logger ind med bruger
 		Boolean loggedIn = sys.login("Michael","123");
 		
-		//opretter to projekter
+		//E1 - opretter to projekter
 		Project pro = new Project("testName",sys);
 		sys.createProject(pro);
 		Project pro2 = new Project("test2",sys);
 		sys.createProject(pro2);
-		
 		//tilføjer information til project
 		pro.setCostumer("costumer");
 		pro.setStartDate(3,2016);
 		pro.setEndDate(3,2017);
-		
 		pro.addDev(sys.findDev("Jonas"));
-		
 		pro.setTimeBudget(100);
 		pro.setProjectLeader(pro.findDev("Jonas"));
-		
 		//checker om projekteterne er oprettet
 		assertEquals(2,sys.getProjects().size());
 		
-		//Checker om søg funktionen virker og navnet
+		//E2 - Checker om søg funktionen virker og navnet
 		pro = sys.findProject("testName");
 		assertEquals("testName",pro.getName());
 		
@@ -65,6 +61,9 @@ public class TestCreateProject {
 		//checker projectleader
 		assertEquals(dev,pro.getProjectLeader());
 		
+		//tester ID
+		assertEquals("20160000",pro.getProjectID());
+		
 		//Tester delete project
 		sys.deleteProject(pro);
 		assertEquals(sys.getProjects().size(),1);
@@ -88,7 +87,7 @@ public class TestCreateProject {
 		
 		
 		
-		//oprette project med samme navn
+		//F1 - oprette project med samme navn
 		try{
 			Project pro1 = new Project("sameName",sys);
 			sys.createProject(pro1);
@@ -98,7 +97,7 @@ public class TestCreateProject {
 			assertEquals("CreateProject",e.getOperation());
 		}
 		
-		//tilføje aktiviteter når man ikke er projectLeader
+		//F2 - tilføje aktiviteter når man ikke er projectLeader
 		Date start = new Date(3,2016,sys);
 		Date end = new Date(3,2017,sys);
 		try{
@@ -108,7 +107,8 @@ public class TestCreateProject {
 			assertEquals("You have to be project leader to use this function",e.getMessage());
 			assertEquals("Add activity",e.getOperation());
 		}
-		//Søge på developer med forkert navn
+		
+		//F3 - Søge på developer med forkert navn
 		pro.addDev(user);
 		try{
 			pro.findDev("michael");
@@ -117,7 +117,7 @@ public class TestCreateProject {
 			assertEquals("No user found",e.getMessage());
 			assertEquals("Find developer",e.getOperation());
 		}
-		//Søge på project med forkert navn
+		//F4 - Søge på project med forkert navn
 		try{
 			sys.findProject("forkertNavn");
 			fail("ProjectNotFoundException should have been thrown");

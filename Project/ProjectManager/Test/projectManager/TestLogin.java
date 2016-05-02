@@ -19,14 +19,15 @@ public class TestLogin {
 		//tjekker om nogen er logget ind
 		assertFalse(sys.getLoggedIn());
 		
-		//logger ind med bruger
+		//A1 - logger ind med bruger
 		Boolean loggedIn = sys.login("Michael","123");
 		assertTrue(loggedIn);
-		//logger ud
+		
+		//A2 - logger ud
 		loggedIn = sys.logOut();
 		assertFalse(loggedIn);
 		
-		//wrong password
+		//A3 - wrong password
 		try{
 			loggedIn = sys.login("Michael","321");
 			fail("WrongCredentialsException exception should have been thrown");
@@ -36,7 +37,7 @@ public class TestLogin {
 		}
 		assertFalse(loggedIn);
 	
-		//wrong Username
+		//A4 - wrong Username
 		try{
 			loggedIn = sys.login("ichael","123");
 			fail("WrongCredentialsException exception should have been thrown");

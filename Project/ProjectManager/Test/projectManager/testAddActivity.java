@@ -31,15 +31,13 @@ public class testAddActivity{
 		//checker om der er aktiviteter tilføjet
 		assertEquals(0,pro.getActivities().size());
 		
-		//tilføjer en aktivitet
-		pro.addActivity(act);
-		
+		//G1 - tilføjer en aktivitet
+		pro.addActivity(act);	
 		//checker om aktiviteten er blevet tiføjet til projectet
 		assertEquals(1,pro.getActivities().size());
 		
-		//tilføjer en developer
+		//G2 - tilføjer en developer
 		act.addDev(pro.findDev("Jonas"));
-		
 		//checker om dev er blevet added
 		assertEquals(1,act.getUsers().size());
 		
@@ -67,7 +65,7 @@ public class testAddActivity{
 		
 		
 		pro.addActivity(act);
-		//add aktivitet med samme navn
+		//H1 - add aktivitet med samme navn
 		try{
 			pro.addActivity(act);
 			fail("ActivityAlreadyExistsException should have been thrown");
@@ -107,10 +105,11 @@ public class testAddActivity{
 		Date date2 = new Date(4,2016,sys);
 		Date date3 = new Date(5,2016,sys);
 		
-		//ingen har registreret noget tid så alle skulle have mulighed for at deltage
+		//I1 - ingen har registreret noget tid så alle skulle have mulighed for at deltage
 		List<User> devs = pro.getAvailableDev(date1,date3,50);
 		assertEquals(devs.size(),4);
 		
+		//I2 
 		//dev3 registrere 3 ugers ferie
 		dev3.RegisterTime(date1,null,"Holiday",dev3.getWeeklyWorkHours());
 		dev3.RegisterTime(date2,null,"Holiday",dev3.getWeeklyWorkHours());
@@ -127,6 +126,7 @@ public class testAddActivity{
 	}
 	@Test
 	public void testEditAct() throws Exception{
+		// testing get and set for edit act
 		//opretter system
 				MAIN sys = new MAIN();
 				Activity act = new Activity("testName","testActi",new Date(3,2016,sys),new Date(3,2017,sys),100);
@@ -169,5 +169,9 @@ public class testAddActivity{
 				assertEquals(newStartDate,act.getStartDate());
 				assertEquals(newEndDate,act.getEndDate());
 				assertEquals(newTimeBudget,act.getTimeBudget(),1e15);
+				
+				pro.deleteActivity(act);
+				
+				assertEquals(0,pro.getActivities().size());
 	}
 }

@@ -28,38 +28,36 @@ public class testRegisterTimeOff{
 		Date date4 = new Date(8,2016,sys);
 		Date date5 = new Date(9,2016,sys);
 		
+		
+		//K1 - Registers holiday:
 		//Asserts if the user is available in week 4, 5 and 6:
-		assertTrue(user.isAvailable(date,10));
-		assertTrue(user.isAvailable(date1,10));
-		assertTrue(user.isAvailable(date2,10));
-		
-		
-		//Registers holiday:
+		assertTrue(user.isAvailable(date,10)); //K11
+		assertTrue(user.isAvailable(date1,10)); //K12
+		assertTrue(user.isAvailable(date2,10)); //K13
 		user.RegisterTime(date,null,"Holiday",user.getWeeklyWorkHours());
-		assertFalse(user.isAvailable(date,user.getWeeklyWorkHours()));
+		assertFalse(user.isAvailable(date,user.getWeeklyWorkHours())); //Kl4
 		
-		//Asserts if the user is now available in week 5 and available in week 4 and 6:
-		assertFalse(user.isAvailable(date,10));
-		assertTrue(user.isAvailable(date1,10));
-		assertTrue(user.isAvailable(date2,10));
+		//K2 - Asserts if the user is now available in week 5 and available in week 4 and 6:
+		assertFalse(user.isAvailable(date,10)); //K21
+		assertTrue(user.isAvailable(date1,10)); //K22
+		assertTrue(user.isAvailable(date2,10)); //K23
 		
 		
-		//Registers holiday in week 6-9:
-		
+		//K3 - Registers holiday in week 6-9:	
 		user.RegisterTime(date2,null,"Holiday",user.getWeeklyWorkHours());
-		assertFalse(user.isAvailable(date2,user.getWeeklyWorkHours()));
+		assertFalse(user.isAvailable(date2,user.getWeeklyWorkHours())); //K31
 		user.RegisterTime(date3,null,"Holiday",user.getWeeklyWorkHours());
-		assertFalse(user.isAvailable(date3,user.getWeeklyWorkHours()));
+		assertFalse(user.isAvailable(date3,user.getWeeklyWorkHours()));//K32
 		user.RegisterTime(date4,null,"Holiday",user.getWeeklyWorkHours());
-		assertFalse(user.isAvailable(date4,user.getWeeklyWorkHours()));
+		assertFalse(user.isAvailable(date4,user.getWeeklyWorkHours()));//K33
 		user.RegisterTime(date5,null,"Holiday",user.getWeeklyWorkHours());
-		assertFalse(user.isAvailable(date4,user.getWeeklyWorkHours()));
+		assertFalse(user.isAvailable(date4,user.getWeeklyWorkHours()));//K34
 		
-		//Tests if the user is now unavailable during the holiday:
-		assertFalse(user.isAvailable(date2,10));
-		assertFalse(user.isAvailable(date3,10));
-		assertFalse(user.isAvailable(date4,10));
-		assertFalse(user.isAvailable(date5,10));
+		//K4 - Tests if the user is now unavailable during the holiday:
+		assertFalse(user.isAvailable(date2,10)); //K41
+		assertFalse(user.isAvailable(date3,10)); //K42
+		assertFalse(user.isAvailable(date4,10)); //K43
+		assertFalse(user.isAvailable(date5,10)); //K44
 		
 	}
 	
@@ -94,16 +92,15 @@ public class testRegisterTimeOff{
 		pro.addActivity(act);
 		act.addDev(pro.findDev("Michael"));
 
+		//L1 - Attempts to register whilst conflicting
 		user.RegisterTime(startDate,null,"Holiday",user.getWeeklyWorkHours());
 		assertFalse(user.isAvailable(startDate,user.getWeeklyWorkHours()));
-		
-		
 		//tester for anden dato mock server
 		d = new int[]{5,2016};
 		when(dateServer.getDate()).thenReturn(d);
 		assertFalse(user.isAvailable(startDate,user.getWeeklyWorkHours()));
 	}
-	@Test
+	@Test	
 	public void testRegisterSick() throws Exception{
 		//opretter system
 		MAIN sys = new MAIN();
@@ -117,7 +114,7 @@ public class testRegisterTimeOff{
 		Date date = new Date(5,2016,sys);
 		
 		
-		//Registers sick: 
+		//M1 - Registers sick: 
 		user.RegisterTime(date,null,"Sick",user.getWeeklyWorkHours());
 		assertFalse(user.isAvailable(date,user.getWeeklyWorkHours()));
 		
