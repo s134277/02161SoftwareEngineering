@@ -1,9 +1,11 @@
 package Interface;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import projectManager.DateServer;
+import projectManager.Activity;
 import projectManager.Project;
+import projectManager.User;
 
 public class reportManager {
 
@@ -13,11 +15,18 @@ public class reportManager {
 		title[0] = "Weekly status report for project: " + pro.getName();
 		title[1] = "week: ";
 		title[2] = "Basic info:";
-		
-		
 		String[] head = generateHeader(pro);
 		String[] body = generateBody(pro);
-		
+
+		for(String tit : title){
+			System.out.println(tit);
+		}
+		for(String hea : head){
+			System.out.println(hea);
+		}
+		for(String bod : body){
+			System.out.println(bod);
+		}
 	}
 	
 	public String[] generateHeader(Project pro) {
@@ -48,14 +57,24 @@ public class reportManager {
 		// Report body contains info about the activities, 
 		// associated developers and time spent versus time left 
 		// and comparisons to the deadlines
-		return null;
-	}
-
-	public void printReport() {
-		// TODO Auto-generated method stub
+		List<String> body = new ArrayList<String>();
+		List<Activity> Activities = pro.getActivities();
 		
+		int index = 1;
+		for(Activity act : Activities){
+			body.add(index + ". " + act.getName() + " : " + act.getRemainingHours() + "/" + act.getTimeBudget());
+			index++;
+			if(act.getUsers().isEmpty()) body.add("   - No developers added");
+			else{
+				List<User> Developers = act.getUsers();
+				for(User dev : Developers){
+					body.add("   - " + dev.getName() + " : " + dev.getRegisteredTime(act) + "/" + act.getTimeBudget());
+				}
+			}
+		}
+		
+		String[] StringBody = body.toArray(new String[body.size()]);
+		
+		return StringBody;
 	}
-
-	
-	
 }

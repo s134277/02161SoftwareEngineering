@@ -11,6 +11,7 @@ public class Interface {
 	static userInput ui = new userInput();
 	
 	public static void main(String[] args) throws Exception {
+		main.setDateServer(new DateServer());
 		
 		boolean exit = false;
 		while(!exit && !main.getLoggedIn()){ 
@@ -41,15 +42,16 @@ public class Interface {
 		
 		Activity act = null;
 		if(proj != null){
-			act = mm.selectUserRelatedActivity(proj, main.getCurrentUser());
+			act = mm.selectUserRelatedActivity(main,proj);
 		}
 		
 		if(act != null){
-			int choice = ui.intInput("");
-			while(choice != 0){
+			boolean cancel = false;
+			int choice = ui.intInputInterval("a number", 1);
+			while(!cancel){
 				switch(choice){
-					case 0: break; //cancel
-					case 1: main.getCurrentUser().RegisterTime(main.getDate(),proj,act.getName(),ui.doubleInput("total work hours for today")); break; //register time
+					case 0: cancel = true; break; //cancel
+					case 1: main.getCurrentUser().RegisterTime(main.getDate(),proj,act.getName(),ui.doubleInput("total work hours for today")); cancel = true; break; //register time
 				}
 			}
 		}else{
@@ -78,7 +80,7 @@ public class Interface {
 	}
 
 	private static void createProject() {
-		String projectName = mm.createProject();
+		String projectName = ui.stringInput("project name");
 		
 		Project pro = new Project(projectName,main);
 		try {
@@ -100,7 +102,13 @@ public class Interface {
 	private static void viewSelectedProject(Project project) {
 		boolean cancel = false;
 		while(!cancel){
-			int choice = mm.viewSelectedProject(project);
+			boolean isLeader = false;
+			if(project.getProjectLeader() != null){
+				if(project.getProjectLeader().equals(main.getCurrentUser()))
+					isLeader = true;
+			} 
+			
+			int choice = mm.viewSelectedProject(project,isLeader);
 			switch (choice){
 				case 0: cancel = true; break;
 				case 1: mm.displayProjectDetails(project,rm); break;
@@ -108,15 +116,12 @@ public class Interface {
 				case 3:	addProjectLeader(project); break;
 				case 4: addActivity(project); break;
 				case 5: editActivity(project); break;
-				case 6: deleteProject(project); break;
-				case 7: generateProjectReport(project); break;
+				case 6: deleteProject(project); 
+						cancel = true;
+						break;
+				case 7: rm.generateReport(project);; break;
 			}
 		}
-	}
-
-	private static void generateProjectReport(Project project) {
-		rm.printReport();
-		
 	}
 
 	private static void deleteProject(Project project) {
@@ -129,29 +134,67 @@ public class Interface {
 		System.out.println("0. Cancel");
 		mm.printActivitiesAndDevelopers(project);
 		int choice = ui.intInput("an activity number from the list above");
-		if(choice== 0){
+		if(choice == 0){
 			//user has selected cancel
 		}else{
 			Activity act = project.getActivities().get(choice-1);
-			int editChoice = -1;
-			while(editChoice != 0){
-				editChoice = mm.editActivity(act);
+			boolean cancel = false;
+			while(!cancel){
+				int editChoice = mm.editActivity(act);
 				switch(editChoice){
-					case 0: break;
+					case 0: cancel = true; break;
 					case 1:	act.setName(ui.stringInput("a new name")); break;
 					case 2: act.setDescription(ui.stringInput("a description")); break;
 					case 3: act.setStartDate(interpretDate(ui.stringInput("new date in format 'ww.yyyy'"))); break;
 					case 4: act.setEndDate(interpretDate(ui.stringInput("new date in format 'ww.yyyy'"))); break;
 					case 5: act.setTimebudget(ui.intInput("a time budget (hours)")); break;
-					case 6: break;
-					/**
-					 * still needs to be able to add devs.
-					 */
+					case 6: addDeveloper(act,project); break;
 					case 7: project.deleteActivity(act); 
 							System.out.println("Activity deleted");
-							editChoice = 0; break;
+							cancel = true; break;
 				}
 			}
+		}
+	}
+
+	private static void addDeveloper(Activity act, Project pro) {
+		System.out.println("Add developer:");
+		System.out.println("0. Cancel");
+		System.out.println("1. Add by name");
+		System.out.println("2. Search for available developer");
+		System.out.println(" (needs to be already associated with the project)");
+		int choice = ui.intInputInterval("select an option", 3);
+		
+		switch(choice){
+		case 0: break; //cancel
+		case 1: try{ act.addDev(main.findDev(ui.stringInput("username"))); break; //add by name
+				}catch(UserNotFoundException e){
+					System.out.println(e.getMessage());
+					break;
+				}
+		case 2: User user = findDeveloperByActivity(act, pro);
+				if(user != null){
+					act.addDev(user);
+					System.out.println("User " + user.getName() + " succesfully added!");
+				}
+				break;
+		}
+	}
+	
+	private static User findDeveloperByActivity(Activity act, Project pro){
+		List<User> users = pro.getAvailableDev(act.getStartDate(), act.getEndDate(), ui.intInputInterval("how many hours the developer needs to be available", (int) act.getRemainingHours()));
+		System.out.println("Select a user:");
+		if(users.isEmpty()){
+			System.out.println("No available users found for your activity");
+			return null;
+		} else{
+			int index = 0;
+			for(User user : users){
+				System.out.println(index + ". " + user.getName());
+				index++;
+			}
+			int userIndex = ui.intInputInterval("user number", index);
+			return users.get(userIndex);
 		}
 	}
 
@@ -201,9 +244,9 @@ public class Interface {
 
 	private static void createUser() throws Exception {
 		System.out.println("Create user menu:");
-		String username = ui.stringInput("desired username");
-		String PW = ui.stringInput("desired passwrod");
-		int WWH = ui.intInput("weekly workhours", 37);
+		String username = ui.stringInputSpecificLength("desired username", 4);
+		String PW = ui.stringInput("desired password");
+		int WWH = ui.intInputInterval("weekly work hours", 100);
 		User user = new User(username,PW,WWH);
 		try{
 			main.register(user);

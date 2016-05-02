@@ -5,26 +5,6 @@ import java.util.Scanner;
 public class userInput {
 	
 	public int intInput(String type){
-//		@SuppressWarnings("resource")
-//		Scanner in = new Scanner(System.in);
-//		System.out.println("Enter " + type + ":");
-//		String input = in.nextLine();
-//		
-//		//checks correctness of input:
-//		if(input.isEmpty()){
-//			System.out.println("No input entered, nothing is changed");
-//			return original;
-//		}
-//		
-//		try{
-//			int newInt = Integer.parseInt(input);
-//			return newInt;
-//		} catch(Exception e){
-//			System.out.println("You entered something that wasn't an integer when an integer was expected");
-//			System.out.println("Nothing is changed or defaultvalue selected");
-//			return original;
-//		}
-		
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		
@@ -36,10 +16,9 @@ public class userInput {
 	            in.next();
 	        }
 	        input = in.nextInt();
-	    } while (input <= 0);
+	    } while (input < 0);
 	   
 		return input;
-		
 	}
 	
 	public String stringInput(String type){
@@ -70,7 +49,7 @@ public class userInput {
 		@SuppressWarnings("resource")
 		Scanner in = new Scanner(System.in);
 		
-		Double input;
+		double input;
 	    do {
 	    	System.out.println("Enter " + type + ":");
 	        while (!in.hasNextDouble()) {
@@ -78,7 +57,7 @@ public class userInput {
 	            in.next();
 	        }
 	        input = in.nextDouble();
-	    } while (input <= 0);
+	    } while (input < 0);
 	   
 		return input;
 	}
@@ -96,9 +75,27 @@ public class userInput {
 	            in.next();
 	        }
 	        input = in.nextInt();
-	    } while (input <= 0 && input > max);
+	    } while (input < 0 || input > max);
 
 		return input;
 	}
+	
+	public String stringInputSpecificLength(String type, int value){
+		@SuppressWarnings("resource")
+		Scanner in = new Scanner(System.in);
+		
+		String input;
+	    do {
+	    	System.out.println("Enter " + type + ":");
+	        while (!in.hasNextLine()) {
+	            System.out.println("Incorrect input, must be of length " + value);
+	            in.next();
+	        }
+	        input = in.nextLine();
+	    } while (input.length() != value);
+	   
+		return input;
+	}
+	
 	
 }

@@ -15,32 +15,23 @@ public class menuManager {
 	static userInput ui = new userInput();
 	
 	public int printWelcomeMenu(){
-		@SuppressWarnings("resource")
-		Scanner in = new Scanner(System.in);
 		System.out.println("Welcome to the project manager app!");
 		System.out.println("Your options are:");
 		System.out.println("(Select an option by typing the corresponding number and pressing enter)");
 		System.out.println("1. Login");
 		System.out.println("2. Create user");
 		System.out.println("3. Exit");
-		int i = in.nextInt();
-	
-		if(i < 0 || i > 3) return 0;
-		else return i;
+		return ui.intInputInterval("a number", 3);
 	}
 
 	public int printMainMenu() {
-		@SuppressWarnings("resource")
-		Scanner in = new Scanner(System.in);
 		System.out.println("Main menu:");
 		System.out.println("1. View active projects");
 		System.out.println("2. Create new project");
 		System.out.println("3. Register time");
 		System.out.println("4. Edit user");
 		System.out.println("5. Logout");
-		int i = in.nextInt();
-		if(i < 0 || i > 5) return 0;
-		else return i;
+		return ui.intInputInterval("a number", 5);
 	}
 
 	public int viewProjects(List<Project> projects) {
@@ -57,12 +48,7 @@ public class menuManager {
 			index++;
 			}
 			while(projects.size()>index);
-			@SuppressWarnings("resource")
-			Scanner in = new Scanner(System.in);
-			int i = in.nextInt();
-			
-			if(i < 0 || i > index) return 0;
-			else return i;
+			return ui.intInputInterval("a number", index);
 		}
 	}
 
@@ -74,22 +60,13 @@ public class menuManager {
 		System.out.println("2. Add developers");
 		System.out.println("3. Add/change project leader");
 		if(isLeader){
-		System.out.println("4. Add activity");
-		System.out.println("5. View/edit activities");
-		System.out.println("6. Delete project");
-		System.out.println("7. Generate project report");
+			System.out.println("4. Add activity");
+			System.out.println("5. View/edit activities");
+			System.out.println("6. Delete project");
+			System.out.println("7. Generate project report");
 		return ui.intInputInterval("a number", 7);
 		}else
 			return ui.intInputInterval("a number", 3);
-		
-		
-	}
-
-	public String createProject() {
-		@SuppressWarnings("resource")
-		Scanner in = new Scanner(System.in);
-		System.out.println("Project name:");
-		return in.nextLine();
 	}
 
 	public void displayProjectDetails(Project project,reportManager rm) {
@@ -140,10 +117,6 @@ public class menuManager {
 	}
 
 	public int editActivity(Activity act) {
-		int choice = 0;
-		
-		@SuppressWarnings("resource")
-		Scanner in = new Scanner(System.in);
 		System.out.println("Edit activity: (select an number to change the info)");
 		System.out.println("0. Cancel");
 		System.out.println("1. Name: " + act.getName());
@@ -153,41 +126,40 @@ public class menuManager {
 		System.out.println("5. Time budget: " + act.getTimeBudget());
 		System.out.println("6. Add developer");
 		System.out.println("7. Delete activity");
-		choice = in.nextInt();
-		
-		if(choice < 0 || choice > 7) return 0;
-		else return choice; 
+		return ui.intInputInterval("number", 7);
 	}
 
 	public int editUser() {
-		int choice = 0;
-		
-		@SuppressWarnings("resource")
-		Scanner in = new Scanner(System.in);
-		
-		System.out.println("Edit user: 8select one)");
+		System.out.println("Edit user: select one)");
 		System.out.println("1. Change username");
 		System.out.println("2. Change password");
 		System.out.println("3. Change weekly work hours");
 		System.out.println("4. Delete user");
-		
-		choice = in.nextInt();
-		if(choice < 0 || choice > 4) return 0;
-		else return choice; 
+		return ui.intInputInterval("number", 4);
 	}
 
-	public Activity selectUserRelatedActivity(Project proj, User user) {
-		List<Activity> Activities = proj.getActivities();
-		int index = 1;
-		for(Activity act : Activities){
-			System.out.println(index + ". " + act.getName() + " : " + user.getRegisteredTime(act));
-			index++;
+	public Activity selectUserRelatedActivity(MAIN main,Project proj) {
+		User user = main.getCurrentUser();
+		List<Activity> activities = new ArrayList<Activity>();
+		
+		for(Activity act : proj.getActivities()){
+			for(User dev : act.getUsers()){
+				if(dev.equals(user)) activities.add(act);
+			}
 		}
 		
-		int choice = ui.intInputInterval("an activity number", index-1);
-		
-		return Activities.get(choice);
-		
+		if(activities.isEmpty()){
+			System.out.println("You are not registered with any activities yet");
+			return null;
+		}
+		System.out.println("Activities you are associated with:");
+		int index = 1;
+		for(Activity act : activities){
+			System.out.println(index + ". " + act.getName());
+			index++;
+		}
+		int selection = ui.intInputInterval("an activity number", index);
+		return activities.get(selection-1);
 	}
 
 	public Project selectUserRelatedProject(MAIN main) {
@@ -207,14 +179,13 @@ public class menuManager {
 			System.out.println("You are not registered with any projects yet");
 			return null;
 		}
-		
 		System.out.println("Projects you are associated with:");
 		int index = 1;
 		for(Project proj : projects){
 			System.out.println(index + ". " + proj.getName());
+			index++;
 		}
-		int selection = ui.intInputInterval("a project number", index-1);
+		int selection = ui.intInputInterval("a project number", index);
 		return projects.get(selection-1);
 	}
-
 }
