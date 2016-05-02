@@ -8,6 +8,7 @@ public class Interface {
 	static menuManager mm = new menuManager();
 	static MAIN main = new MAIN();
 	static reportManager rm = new reportManager();
+	static userInput ui = new userInput();
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -36,17 +37,24 @@ public class Interface {
 	}
 
 	private static void registerTime() {
-		Project proj = mm.viewUserRelatedProjects();
-		Activity act = mm.viewUserRelatedActivities();
+		Project proj = mm.selectUserRelatedProject(main);
 		
-		int choice = mm.registerTimeMenu();
-		
-		switch(choice){
-		case 0: break; //cancel
-		case 1: main.getCurrentUser().RegisterTime(date, act.getName(), hours); break; //register time
-		case 2: break;
+		Activity act = null;
+		if(proj != null){
+			act = mm.selectUserRelatedActivity(proj, main.getCurrentUser());
 		}
 		
+		if(act != null){
+			int choice = ui.intInput("");
+			while(choice != 0){
+				switch(choice){
+					case 0: break; //cancel
+					case 1: main.getCurrentUser().RegisterTime(main.getDate(),proj,act.getName(),ui.doubleInput("total work hours for today")); break; //register time
+				}
+			}
+		}else{
+			System.out.println("No activity selected or found by system");
+		}
 	}
 
 	private static void editUser() {
@@ -54,13 +62,13 @@ public class Interface {
 		switch(choice){
 		case 0: break;
 		case 1:			
-			main.getCurrentUser().setName(mm.stringInput("new username"));
+			main.getCurrentUser().setName(ui.stringInput("new username"));
 			break;
 		case 2:
-			main.getCurrentUser().setPW(mm.stringInput("new password"));
+			main.getCurrentUser().setPW(ui.stringInput("new password"));
 			break;
 		case 3:
-			main.getCurrentUser().setWeeklyWorkHours(mm.intInput("weekly work hours", (int) main.getCurrentUser().getWeeklyWorkHours()));
+			main.getCurrentUser().setWeeklyWorkHours(ui.intInput("weekly work hours"));
 			break;
 		case 4:
 			main.deleteGlobalUser(main.getCurrentUser());
@@ -120,7 +128,7 @@ public class Interface {
 		System.out.println("Activities:");
 		System.out.println("0. Cancel");
 		mm.printActivitiesAndDevelopers(project);
-		int choice = mm.intInput("an activity number from the list above", 0);
+		int choice = ui.intInput("an activity number from the list above");
 		if(choice== 0){
 			//user has selected cancel
 		}else{
@@ -130,11 +138,11 @@ public class Interface {
 				editChoice = mm.editActivity(act);
 				switch(editChoice){
 					case 0: break;
-					case 1:	act.setName(mm.stringInput("a new name")); break;
-					case 2: act.setDescription(mm.stringInput("a description")); break;
-					case 3: act.setStartDate(interpretDate(mm.stringInput("new date in format 'ww.yyyy'"))); break;
-					case 4: act.setEndDate(interpretDate(mm.stringInput("new date in format 'ww.yyyy'"))); break;
-					case 5: act.setTimebudget(mm.intInput("a time budget (hours)", (int) act.getTimeBudget())); break;
+					case 1:	act.setName(ui.stringInput("a new name")); break;
+					case 2: act.setDescription(ui.stringInput("a description")); break;
+					case 3: act.setStartDate(interpretDate(ui.stringInput("new date in format 'ww.yyyy'"))); break;
+					case 4: act.setEndDate(interpretDate(ui.stringInput("new date in format 'ww.yyyy'"))); break;
+					case 5: act.setTimebudget(ui.intInput("a time budget (hours)")); break;
 					case 6: break;
 					/**
 					 * still needs to be able to add devs.
@@ -170,7 +178,7 @@ public class Interface {
 	}
 
 	private static void addProjectLeader(Project project) {
-		String developer = mm.stringInput("project leader name");
+		String developer = ui.stringInput("project leader name");
 		
 		try {
 			project.setProjectLeader(main.findDev(developer));
@@ -181,7 +189,7 @@ public class Interface {
 	}
 
 	private static void addDeveloper(Project project) {
-		String developer = mm.stringInput("developer name");
+		String developer = ui.stringInput("developer name");
 		
 		try {
 			project.addDev(main.findDev(developer));
@@ -193,9 +201,9 @@ public class Interface {
 
 	private static void createUser() throws Exception {
 		System.out.println("Create user menu:");
-		String username = mm.stringInput("desired username");
-		String PW = mm.stringInput("desired passwrod");
-		int WWH = mm.intInput("weekly workhours", 37);
+		String username = ui.stringInput("desired username");
+		String PW = ui.stringInput("desired passwrod");
+		int WWH = ui.intInput("weekly workhours", 37);
 		User user = new User(username,PW,WWH);
 		try{
 			main.register(user);
@@ -208,8 +216,8 @@ public class Interface {
 
 	private static void login() throws Exception{
 		System.out.println("Log in menu:");
-		String username = mm.stringInput("username");
-		String PW = mm.stringInput("password");
+		String username = ui.stringInput("username");
+		String PW = ui.stringInput("password");
 		try {
 			main.login(username, PW);
 		} catch (WrongCredentialsException e) {
