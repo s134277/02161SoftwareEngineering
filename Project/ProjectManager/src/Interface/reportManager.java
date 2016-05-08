@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import projectManager.Activity;
+import projectManager.MAIN;
 import projectManager.Project;
 import projectManager.User;
 
 public class reportManager {
 
-	public void generateReport(Project pro){
+	public void generateReport(Project pro, MAIN main){
 
 		String[] title = new String[3];
 		title[0] = "Weekly status report for project: " + pro.getName();
-		title[1] = "week: ";
+		title[1] = "Date: " + main.getDate().getWeek() + ", " + main.getDate().getYear();
 		title[2] = "Basic info:";
 		String[] head = generateHeader(pro);
 		String[] body = generateBody(pro);

@@ -30,7 +30,7 @@ public class Interface {
 				case 0: break;
 				case 1: viewProjects(); break;
 				case 2: createProject(); break;
-				case 3: registerTime(); break; //register time
+				case 3: registerTime(); break;
 				case 4: editUser(); break;
 				case 5: main.logOut(); break;
 			}
@@ -38,25 +38,48 @@ public class Interface {
 	}
 
 	private static void registerTime() {
-		Project proj = mm.selectUserRelatedProject(main);
+		System.out.println("Is this 1: holiday/sickness? or 2: regular time registration?");
+		System.out.println("0. Cancel");
+		System.out.println("1. Holiday/sickness");
+		System.out.println("2. Regular time registration");
+		System.out.println("3. Registration with external activity");
+		int registerType = ui.intInputInterval("a number", 3);
+		
+		switch(registerType){
+			case 0: break; //do nothing (cancel)
+			case 1: mm.registerTimeOff(main); break; // register holiday or sickness.
+			case 2: registerTime(main,true); break;
+			case 3: registerTime(main,false); break;
+		}
+
+	}
+
+	private static void registerTime(MAIN main,boolean local) {
+		Project proj = null;
+		if(local) proj = mm.selectUserRelatedProject(main);
+		else proj = mm.selectAmongstAllProjects(main);
 		
 		Activity act = null;
 		if(proj != null){
-			act = mm.selectUserRelatedActivity(main,proj);
+			if(local) act = mm.selectUserRelatedActivity(main,proj);
+			else act = mm.selectAmongstAllActivities(proj);
 		}
-		
+	
 		if(act != null){
 			boolean cancel = false;
-			int choice = ui.intInputInterval("a number", 1);
+			int choice = ui.intInputInterval("1 to select the activity: " + act.getName() + " or 0 to cancel" , 1);
 			while(!cancel){
 				switch(choice){
 					case 0: cancel = true; break; //cancel
-					case 1: main.getCurrentUser().RegisterTime(main.getDate(),proj,act.getName(),ui.doubleInput("total work hours for today")); cancel = true; break; //register time
+					case 1: main.getCurrentUser().RegisterTime(main.getDate(),proj,act.getName(),ui.doubleInput("total work hours for today")); 
+					cancel = true; break;
 				}
 			}
 		}else{
 			System.out.println("No activity selected or found by system");
 		}
+		
+		
 	}
 
 	private static void editUser() {
@@ -114,12 +137,16 @@ public class Interface {
 				case 1: mm.displayProjectDetails(project,rm); break;
 				case 2: addDeveloper(project); break;
 				case 3:	addProjectLeader(project); break;
-				case 4: addActivity(project); break;
-				case 5: editActivity(project); break;
-				case 6: deleteProject(project); 
+				case 4: project.setCostumer(ui.stringInput("a customer name"));break;
+				case 5: project.setStartDate(ui.intInputInterval("a week number", 52), ui.intInput("a year")); break; //change start date
+				case 6: project.setEndDate(ui.intInputInterval("a week number", 52), ui.intInput("a year")); break; //end date
+				case 7: project.setTimeBudget(ui.doubleInput("a time budget")); break;
+				case 8: addActivity(project); break;
+				case 9: editActivity(project); break;
+				case 10: deleteProject(project); 
 						cancel = true;
 						break;
-				case 7: rm.generateReport(project);; break;
+				case 11: rm.generateReport(project,main); break;
 			}
 		}
 	}

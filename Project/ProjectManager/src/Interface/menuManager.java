@@ -51,6 +51,24 @@ public class menuManager {
 			return ui.intInputInterval("a number", index);
 		}
 	}
+	
+	public int viewActivities(Project proj) {
+			List<Activity> activities = proj.getActivities();
+		
+			System.out.println("Current activities for project: " + proj.getName());
+			System.out.println("0. Cancel");
+			int index = 0;
+			for(Activity act : activities){
+				index++;
+				System.out.println(index + ". " + act.getName());
+			}
+			
+			int choice = ui.intInputInterval("a number", index);
+			
+			return choice;
+			
+	}
+	
 
 	public int viewSelectedProject(Project project,boolean isLeader) {
 		System.out.println("Project: " + project.getName());
@@ -59,14 +77,18 @@ public class menuManager {
 		System.out.println("1. View project details");
 		System.out.println("2. Add developers");
 		System.out.println("3. Add/change project leader");
+		System.out.println("4. add customer name");
+		System.out.println("5. change start date");
+		System.out.println("6. change end date");
+		System.out.println("7. change timebudget");
 		if(isLeader){
-			System.out.println("4. Add activity");
-			System.out.println("5. View/edit activities");
-			System.out.println("6. Delete project");
-			System.out.println("7. Generate project report");
-		return ui.intInputInterval("a number", 7);
+			System.out.println("8. Add activity");
+			System.out.println("9. View/edit activities");
+			System.out.println("10. Delete project");
+			System.out.println("11. Generate project report");
+		return ui.intInputInterval("a number", 11);
 		}else
-			return ui.intInputInterval("a number", 3);
+			return ui.intInputInterval("a number", 7);
 	}
 
 	public void displayProjectDetails(Project project,reportManager rm) {
@@ -188,4 +210,37 @@ public class menuManager {
 		int selection = ui.intInputInterval("a project number", index);
 		return projects.get(selection-1);
 	}
+
+	public void registerTimeOff(MAIN main) {
+		System.out.println("0. Cancel");
+		System.out.println("1. Holiday");
+		System.out.println("2. Sickness");
+		int timeOffSelection = ui.intInputInterval("a number", 2);
+		
+		if(timeOffSelection != 0){
+			String name;
+			if(timeOffSelection == 1) name = "Holiday";
+			else name = "Sick";
+			//Automatically books 1/5th of weekly work hours on current day as Holiday/sick
+			main.getCurrentUser().RegisterTime(main.getDate(),null,name,main.getCurrentUser().getWeeklyWorkHours()/5);
+		}
+	}
+
+	public Project selectAmongstAllProjects(MAIN main) {
+		List<Project> projects = main.getProjects();
+		return projects.get(viewProjects(projects));
+	}
+
+	public Activity selectAmongstAllActivities(Project proj) {
+		int selectedAct = viewActivities(proj);
+		if (selectedAct == 0){
+			return null;
+		}
+		else{
+			List<Activity> activities = proj.getActivities();
+			return activities.get(selectedAct-1);
+		}
+	}
+	
+	
 }
