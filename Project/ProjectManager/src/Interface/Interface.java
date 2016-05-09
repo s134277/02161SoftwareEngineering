@@ -283,7 +283,11 @@ public class Interface {
 	private static void createUser() throws Exception {
 		System.out.println("Create user menu:");
 		String username = ui.stringInputSpecificLength("desired username", 4);
-		String PW = ui.stringInput("desired password");
+		String PW;
+		do{
+			PW = ui.stringInput("desired password");
+		}while(PW==null);
+				
 		int WWH = ui.intInputInterval("weekly work hours", 100);
 		User user = new User(username,PW,WWH);
 		try{

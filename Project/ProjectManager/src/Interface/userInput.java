@@ -37,7 +37,7 @@ public class userInput {
 		
 		//checks correctness of input:
 		if(input.isEmpty()){
-			System.out.println("No input entered, nothing is changed");
+			System.out.println("No input entered");
 			return null;
 		}
 		
