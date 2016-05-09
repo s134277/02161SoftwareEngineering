@@ -13,14 +13,14 @@ public class TestLogin {
 	public void testLogin() throws Exception{
 		// opretter bruger
 		MAIN sys = new MAIN();
-		User user = new User("Michael","123",37);
+		User user = new User("Mich","123",37);
 		sys.register(user);
 		
 		//tjekker om nogen er logget ind
 		assertFalse(sys.getLoggedIn());
 		
 		//A1 - logger ind med bruger
-		Boolean loggedIn = sys.login("Michael","123");
+		Boolean loggedIn = sys.login("Mich","123");
 		assertTrue(loggedIn);
 		
 		//A2 - logger ud
@@ -29,7 +29,7 @@ public class TestLogin {
 		
 		//A3 - wrong password
 		try{
-			loggedIn = sys.login("Michael","321");
+			loggedIn = sys.login("Mich","321");
 			fail("WrongCredentialsException exception should have been thrown");
 		} catch (WrongCredentialsException e) {
 			assertEquals("Wrong Password or Username",e.getMessage());
@@ -39,7 +39,7 @@ public class TestLogin {
 	
 		//A4 - wrong Username
 		try{
-			loggedIn = sys.login("ichael","123");
+			loggedIn = sys.login("icha","123");
 			fail("WrongCredentialsException exception should have been thrown");
 		} catch (WrongCredentialsException e) {
 			assertEquals("Wrong Password or Username",e.getMessage());

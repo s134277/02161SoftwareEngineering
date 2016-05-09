@@ -14,12 +14,12 @@ public class testAddActivity{
 		MAIN sys = new MAIN();
 		Activity act = new Activity("testName","testActi",new Date(3,2016,sys),new Date(3,2017,sys),100);
 		sys.setDateServer(new DateServer());
-		User user = new User("Michael","123",37);
-		User dev = new User("Jonas","321",37);
+		User user = new User("Mich","123",37);
+		User dev = new User("Jona","321",37);
 		sys.register(user);
 		sys.register(dev);
 		
-		sys.login("Michael","123");
+		sys.login("Mich","123");
 		
 		Project pro = new Project("testName",sys);
 		sys.createProject(pro);
@@ -37,7 +37,7 @@ public class testAddActivity{
 		assertEquals(1,pro.getActivities().size());
 		
 		//G2 - tilføjer en developer
-		act.addDev(pro.findDev("Jonas"));
+		act.addDev(pro.findDev("Jona"));
 		//checker om dev er blevet added
 		assertEquals(1,act.getUsers().size());
 		
@@ -49,12 +49,12 @@ public class testAddActivity{
 		
 		//opretter system
 		MAIN sys = new MAIN();
-		User user = new User("Michael","123",37);
-		User dev = new User("Jonas","321",37);
+		User user = new User("Mich","123",37);
+		User dev = new User("Jona","321",37);
 		sys.register(user);
 		sys.register(dev);
 		sys.setDateServer(new DateServer());
-		sys.login("Michael","123");
+		sys.login("Mich","123");
 		
 		Project pro = new Project("testName",sys);
 		sys.createProject(pro);
@@ -78,9 +78,9 @@ public class testAddActivity{
 	public void ListAvailableDev() throws Exception{
 		//opretter system
 		MAIN sys = new MAIN();
-		User dev1 = new User("Michael","123",37);
-		User dev2 = new User("Jonas","321",37);
-		User dev3 = new User("Daniel","321",37);
+		User dev1 = new User("Mich","123",37);
+		User dev2 = new User("Jona","321",37);
+		User dev3 = new User("Dani","321",37);
 		User dev4 = new User("Emil","321",37);
 		sys.register(dev1);
 		sys.register(dev2);
@@ -88,7 +88,7 @@ public class testAddActivity{
 		sys.register(dev4);
 		sys.setDateServer(new DateServer());
 		
-		sys.login("Michael", "123");
+		sys.login("Mich", "123");
 		Project pro = new Project("testName",sys);
 		sys.createProject(pro);
 		
@@ -131,12 +131,12 @@ public class testAddActivity{
 				MAIN sys = new MAIN();
 				Activity act = new Activity("testName","testActi",new Date(3,2016,sys),new Date(3,2017,sys),100);
 				sys.setDateServer(new DateServer());
-				User user = new User("Michael","123",37);
-				User dev = new User("Jonas","321",37);
+				User user = new User("Mich","123",37);
+				User dev = new User("Jona","321",37);
 				sys.register(user);
 				sys.register(dev);
 				
-				sys.login("Michael","123");
+				sys.login("Mich","123");
 				
 				Project pro = new Project("testName",sys);
 				sys.createProject(pro);
@@ -148,7 +148,7 @@ public class testAddActivity{
 				pro.addActivity(act);
 				
 				//tilføjer en developer
-				act.addDev(pro.findDev("Jonas"));
+				act.addDev(pro.findDev("Jona"));
 				
 				//ændre i alle værdier
 				String name = "newName";

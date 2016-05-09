@@ -8,12 +8,12 @@ import org.junit.Test;
 
 public class testDate{
 	@Test
-	public void TestDate() throws UserAlreadyExistsException, NoPasswordEnteredException{
+	public void TestDate() throws Exception{
 		// opretter bruger og project
 		MAIN sys = new MAIN();
-		User user = new User("Michael","123",37);
+		User user = new User("Mich","123",37);
 		sys.register(user);
-		User dev = new User("Jonas","321",37);
+		User dev = new User("Jona","321",37);
 		sys.register(dev);
 		
 		//opretter mock server

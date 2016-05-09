@@ -21,17 +21,18 @@ public class MAIN {
 		return users;
 	}
 
-	public void register(User user) throws UserAlreadyExistsException, NoPasswordEnteredException {
+	public void register(User user) throws Exception {
 		for(User user1 : users){
 			if(user.getName().equals(user1.getName())){
 				throw new UserAlreadyExistsException("Register user operation not allowed if username already taken.","CreateUser");
 			}
 		}
+		if(user.getName().length() != 4) throw new InvalidUserNameException("User name must be 4 characters","create user");
 		if(user.getPW().isEmpty()) throw new NoPasswordEnteredException("Register user operation not allowed if no password entered.","CreateUser");
 		users.add(user);
 	}
 
-	public Boolean login(String name, String PW) throws WrongCredentialsException, UserNotFoundException {
+	public Boolean login(String name, String PW) throws Exception {
 		User user;
 		try{
 			user = findDev(name); 
@@ -46,7 +47,7 @@ public class MAIN {
 		}
 		return loggedIn;
 	}
-	public User findDev(String name) throws UserNotFoundException{
+	public User findDev(String name) throws Exception{
 		for(User user : users){
 			if(name.equals(user.getName())) return user;
 		}
@@ -58,7 +59,7 @@ public class MAIN {
 		return loggedIn;
 	}
 
-	public void createProject(Project pro) throws ProjectAlreadyExistsException {
+	public void createProject(Project pro) throws Exception {
 		for(Project proj : projects){
 			if(pro.getName().equals(proj.getName())){
 				throw new ProjectAlreadyExistsException("Project Already Exists","CreateProject");
@@ -73,7 +74,7 @@ public class MAIN {
 		return projects;
 	}
 
-	public Project findProject(String name) throws ProjectNotFoundException {
+	public Project findProject(String name) throws Exception {
 		for(Project pro : projects){
 			if(name.equals(pro.getName())) return pro;
 		}

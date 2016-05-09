@@ -15,12 +15,12 @@ public class testRegisterTimeOff{
 		//opretter systemet
 		MAIN sys = new MAIN();
 		
-		User user = new User("Michael","123",37);
-		User dev = new User("Jonas","321",37);
+		User user = new User("Mich","123",37);
+		User dev = new User("Jona","321",37);
 		sys.register(user);
 		sys.register(dev);
 		
-		sys.login("Michael","123");
+		sys.login("Mich","123");
 		Date date = new Date(4,2016,sys);
 		Date date1 = new Date(5,2016,sys);
 		Date date2 = new Date(6,2016,sys);
@@ -65,7 +65,7 @@ public class testRegisterTimeOff{
 	public void testRegisterHolidayConflict() throws Exception{
 		//opretter systemet
 		MAIN sys = new MAIN();
-		User user = new User("Michael","123",37);
+		User user = new User("Mich","123",37);
 		sys.register(user);
 		Date start = new Date(5,2016,sys);
 		Date end = new Date(6,2016,sys);
@@ -85,12 +85,12 @@ public class testRegisterTimeOff{
 		
 		//scheduling a conflicting activity:
 		Activity act = new Activity("testName","testActi",start,end,100);
-		sys.login("Michael","123");
+		sys.login("Mich","123");
 		sys.createProject(pro);
-		pro.addDev(sys.findDev("Michael"));
+		pro.addDev(sys.findDev("Mich"));
 		pro.setProjectLeader(user);
 		pro.addActivity(act);
-		act.addDev(pro.findDev("Michael"));
+		act.addDev(pro.findDev("Mich"));
 
 		//L1 - Attempts to register whilst conflicting
 		user.RegisterTime(startDate,null,"Holiday",user.getWeeklyWorkHours());
@@ -105,12 +105,12 @@ public class testRegisterTimeOff{
 		//opretter system
 		MAIN sys = new MAIN();
 		
-		User user = new User("Michael","123",37);
-		User dev = new User("Jonas","321",37);
+		User user = new User("Mich","123",37);
+		User dev = new User("Jona","321",37);
 		sys.register(user);
 		sys.register(dev);
 		
-		sys.login("Michael","123");
+		sys.login("Mich","123");
 		Date date = new Date(5,2016,sys);
 		
 		

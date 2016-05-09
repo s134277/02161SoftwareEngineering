@@ -113,7 +113,7 @@ public class Interface {
 		}
 	}
 
-	private static void createProject() {
+	private static void createProject() throws Exception {
 		String projectName = ui.stringInput("project name");
 		
 		Project pro = new Project(projectName,main);
@@ -125,7 +125,7 @@ public class Interface {
 		}
 	}
 
-	private static void viewProjects() {
+	private static void viewProjects() throws Exception {
 		List<Project> projects = main.getProjects();
 		int choice = mm.viewProjects(projects);
 		
@@ -133,7 +133,7 @@ public class Interface {
 		else viewSelectedProject(projects.get(choice-1));
 	}
 
-	private static void viewSelectedProject(Project project) {
+	private static void viewSelectedProject(Project project) throws Exception {
 		boolean cancel = false;
 		while(!cancel){
 			boolean isLeader = false;
@@ -167,7 +167,7 @@ public class Interface {
 		System.out.println("Project succesfully deleted!");
 	}
 
-	private static void editActivity(Project project) {
+	private static void editActivity(Project project) throws Exception {
 		System.out.println("Activities:");
 		System.out.println("0. Cancel");
 		mm.printActivitiesAndDevelopers(project);
@@ -195,7 +195,7 @@ public class Interface {
 		}
 	}
 
-	private static void addDeveloper(Activity act, Project pro) {
+	private static void addDeveloper(Activity act, Project pro) throws Exception {
 		System.out.println("Add developer:");
 		System.out.println("0. Cancel");
 		System.out.println("1. Add by name");
@@ -258,7 +258,7 @@ public class Interface {
 		}
 	}
 
-	private static void addProjectLeader(Project project) {
+	private static void addProjectLeader(Project project) throws Exception {
 		String developer = ui.stringInput("project leader name");
 		
 		try {
@@ -269,7 +269,7 @@ public class Interface {
 		}
 	}
 
-	private static void addDeveloper(Project project) {
+	private static void addDeveloper(Project project) throws Exception {
 		String developer = ui.stringInput("developer name");
 		
 		try {
@@ -289,8 +289,8 @@ public class Interface {
 		try{
 			main.register(user);
 			System.out.println("Success! - The user has been created");
-		} catch(UserAlreadyExistsException e){
-			System.out.println("Something went wrong, either the username is already taken or you left some input fields empty!");
+		} catch(Exception e){
+			System.out.println(e.getMessage());
 		}
 		main(null);
 	}

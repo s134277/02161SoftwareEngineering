@@ -13,12 +13,12 @@ public class TestRegisterTime {
 		Activity act = new Activity("testName","testActi",new Date(3,2016,sys),new Date(3,2017,sys),100);
 		Activity act2 = new Activity("test2Name","testActi",new Date(3,2016,sys),new Date(3,2017,sys),100);
 		
-		User user = new User("Michael","123",37);
-		User dev = new User("Jonas","321",37);
+		User user = new User("Mich","123",37);
+		User dev = new User("Jona","321",37);
 		sys.register(user);
 		sys.register(dev);
 		sys.setDateServer(new DateServer());
-		sys.login("Michael","123");
+		sys.login("Mich","123");
 		
 		
 		//tjekker om brugeren har registreret noget tid

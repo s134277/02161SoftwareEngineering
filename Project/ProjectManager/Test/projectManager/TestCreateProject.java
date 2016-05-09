@@ -8,35 +8,35 @@ import org.junit.Test;
 
 public class TestCreateProject {
 	@Test
-	public void testCreateProject() throws UserAlreadyExistsException, NoPasswordEnteredException, WrongCredentialsException, ProjectAlreadyExistsException,UserNotFoundException,ProjectNotFoundException{
+	public void testCreateProject() throws Exception{
 		// opretter bruger og project
 		MAIN sys = new MAIN();
-		User user = new User("Michael","123",37);
+		User user = new User("Mich","123",37);
 		sys.register(user);
-		User dev = new User("Jonas","321",37);
+		User dev = new User("Jona","321",37);
 		sys.register(dev);
 		sys.setDateServer(new DateServer());
 		
 				
 		//logger ind med bruger
-		Boolean loggedIn = sys.login("Michael","123");
+		Boolean loggedIn = sys.login("Mich","123");
 		
 		//E1 - opretter to projekter
 		Project pro = new Project("testName",sys);
 		sys.createProject(pro);
 		Project pro2 = new Project("test2",sys);
 		sys.createProject(pro2);
-		//tilføjer information til project
+		//tilføjer information til project 1
 		pro.setCostumer("costumer");
 		pro.setStartDate(3,2016);
 		pro.setEndDate(3,2017);
-		pro.addDev(sys.findDev("Jonas"));
+		pro.addDev(sys.findDev("Jona"));
 		pro.setTimeBudget(100);
-		pro.setProjectLeader(pro.findDev("Jonas"));
+		pro.setProjectLeader(pro.findDev("Jona"));
 		//checker om projekteterne er oprettet
 		assertEquals(2,sys.getProjects().size());
 		
-		//E2 - Checker om søg funktionen virker og navnet
+		//E2 - Checker om søg funktionen virker
 		pro = sys.findProject("testName");
 		assertEquals("testName",pro.getName());
 		
@@ -53,7 +53,7 @@ public class TestCreateProject {
 		assertEquals(2017,pro.getEndDate().getYear());
 		
 		//checker om dev er tilføjet
-		assertEquals(dev,pro.findDev("Jonas"));
+		assertEquals(dev,pro.findDev("Jona"));
 		
 		//Checker time budget
 		assertEquals(100,pro.getTimeBudget(),1e15);
@@ -73,14 +73,14 @@ public class TestCreateProject {
 	public void testCreateProjectFail() throws Exception{
 		//opretter system og brugere
 		MAIN sys = new MAIN();
-		User user = new User("Michael","123",37);
+		User user = new User("Mich","123",37);
 		sys.register(user);
-		User dev = new User("Jonas","321",37);
+		User dev = new User("Jona","321",37);
 		sys.register(dev);
 		sys.setDateServer(new DateServer());
 				
 		//logger ind med bruger
-		Boolean loggedIn = sys.login("Michael","123");
+		Boolean loggedIn = sys.login("Mich","123");
 		
 		Project pro = new Project("sameName",sys);
 		sys.createProject(pro);
@@ -111,7 +111,7 @@ public class TestCreateProject {
 		//F3 - Søge på developer med forkert navn
 		pro.addDev(user);
 		try{
-			pro.findDev("michael");
+			pro.findDev("mich");
 			fail("UserNotFoundException should have been thrown");
 		} catch (UserNotFoundException e) {
 			assertEquals("No user found",e.getMessage());

@@ -16,7 +16,7 @@ public class testCreateUser {
 		assertEquals(0, users.size());
 
 		//B2 - opretter bruger i systemet
-		User user = new User("Michael", "123",37);
+		User user = new User("Mich", "123",37);
 		sys.register(user);
 		// Checker om brugeren er oprettet i systemet
 		users = sys.getUsers();
@@ -24,7 +24,7 @@ public class testCreateUser {
 		
 		// testing get and set
 		User registeredUser = users.get(0);
-		assertEquals("Michael", registeredUser.getName());
+		assertEquals("Mich", registeredUser.getName());
 		assertEquals("123", registeredUser.getPW());
 	}
 	
@@ -33,11 +33,11 @@ public class testCreateUser {
 		MAIN sys = new MAIN();
 
 		//step 1 
-		User user1 = new User("Michael","123",37);
+		User user1 = new User("Mich","123",37);
 		sys.register(user1);
 		
 		//step 2
-		User user2 = new User("Michael","123",37);
+		User user2 = new User("Mich","123",37);
 
 		//C1
 		try {
@@ -56,7 +56,7 @@ public class testCreateUser {
 	public void testNoPasswordEntered() throws Exception {
 		MAIN sys = new MAIN();
 		
-		User user = new User("Jonas","",37);
+		User user = new User("Jona","",37);
 		
 		// D1
 		try {
@@ -70,16 +70,31 @@ public class testCreateUser {
 		}
 	}
 	@Test
+	public void testInvalidUserName() throws Exception {
+		MAIN sys = new MAIN();
+		
+		//O1 - test for invalid username 
+		User user = new User("Jonas","123",37);
+		try {
+			sys.register(user);
+			fail("An InvalidUserNameException should have been thrown");
+		} catch (InvalidUserNameException e) {
+		
+			assertEquals("User name must be 4 characters", e
+					.getMessage());
+		}
+	}
+	@Test
 	public void testEditUser() throws Exception {
 		//testing get and set for edit user
 		
 		MAIN sys = new MAIN();
 		// Step 2) opretter bruger i systemet
-		User user = new User("Michael", "123",37);
+		User user = new User("Mich", "123",37);
 		sys.register(user);
 		
 		//new user values
-		String newName = "Michaela";
+		String newName = "Mica";
 		String newPW = "321";
 		double newWWH = 40;
 		

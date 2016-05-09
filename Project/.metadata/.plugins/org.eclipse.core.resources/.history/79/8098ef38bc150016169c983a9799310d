@@ -1,0 +1,317 @@
+package Interface;
+
+import java.util.*;
+import projectManager.*;
+import projectManager.Date;
+
+public class Interface {
+	static menuManager mm = new menuManager();
+	static MAIN main = new MAIN();
+	static reportManager rm = new reportManager();
+	static userInput ui = new userInput();
+	
+	public static void main(String[] args) throws Exception {
+		main.setDateServer(new DateServer());
+		
+		boolean exit = false;
+		while(!exit && !main.getLoggedIn()){ 
+			int choice = mm.printWelcomeMenu();
+			switch (choice){
+				case 0: break;
+				case 1: login(); break;
+				case 2: createUser(); break;
+				case 3:	exit = true; break;
+			}	
+		}
+		
+		while(!exit && main.getLoggedIn()){
+			int choice = mm.printMainMenu();
+			switch(choice){
+				case 0: break;
+				case 1: viewProjects(); break;
+				case 2: createProject(); break;
+				case 3: registerTime(); break;
+				case 4: editUser(); break;
+				case 5: main.logOut(); break;
+			}
+		}
+	}
+
+	private static void registerTime() {
+		System.out.println("Is this 1: holiday/sickness? or 2: regular time registration?");
+		System.out.println("0. Cancel");
+		System.out.println("1. Holiday/sickness");
+		System.out.println("2. Regular time registration");
+		System.out.println("3. Registration with external activity");
+		int registerType = ui.intInputInterval("a number", 3);
+		
+		switch(registerType){
+			case 0: break; //do nothing (cancel)
+			case 1: mm.registerTimeOff(main); break; // register holiday or sickness.
+			case 2: registerTime(main,true); break;
+			case 3: registerTime(main,false); break;
+		}
+
+	}
+
+	private static void registerTime(MAIN main,boolean local) {
+		
+		while(true){
+			Project proj = null;
+			if(local) proj = mm.selectUserRelatedProject(main);
+			else proj = mm.selectAmongstAllProjects(main);
+			while(true){
+				Activity act = null;
+				if(proj != null){
+					if(local) act = mm.selectUserRelatedActivity(main,proj);
+					else act = mm.selectAmongstAllActivities(proj);
+				}
+	
+				if(act != null){
+					boolean cancel = false;
+					int choice = ui.intInputInterval("1 to select the activity: " + act.getName() + " or 0 to cancel" , 1);
+					while(!cancel){
+						switch(choice){
+						case 0: cancel = true; break; //cancel
+						case 1: 
+							act.addDev(main.getCurrentUser());
+							main.getCurrentUser().RegisterTime(main.getDate(),proj,act.getName(),ui.doubleInput("total work hours for today")); 
+							System.out.println("Time succesfully registered");
+							cancel = true;
+							break;
+						}
+					}
+				}else{
+					System.out.println("No activity selected or found by system");
+					break;
+				}
+				System.out.println("return? (0 = yes, 1 = no)");
+				if(ui.intInputInterval("0 to return", 1)==0) break;
+			}
+			System.out.println("return? (0 = yes, 1 = no)");
+			if(ui.intInputInterval("0 to return", 1)==0) break;
+		}
+	}
+
+	private static void editUser() {
+		int choice = mm.editUser();
+		switch(choice){
+		case 0: break;
+		case 1:			
+			main.getCurrentUser().setName(ui.stringInput("new username"));
+			break;
+		case 2:
+			main.getCurrentUser().setPW(ui.stringInput("new password"));
+			break;
+		case 3:
+			main.getCurrentUser().setWeeklyWorkHours(ui.intInput("weekly work hours"));
+			break;
+		case 4:
+			main.deleteGlobalUser(main.getCurrentUser());
+			main.logOut();
+			break;
+		}
+	}
+
+	private static void createProject() throws Exception {
+		String projectName = ui.stringInput("project name");
+		
+		Project pro = new Project(projectName,main);
+		try {
+			main.createProject(pro);
+			System.out.println("Project " + projectName + " succesfully created");
+		} catch (ProjectAlreadyExistsException e) {
+			System.out.println("Project with desired name does already exist!");
+		}
+	}
+
+	private static void viewProjects() {
+		List<Project> projects = main.getProjects();
+		int choice = mm.viewProjects(projects);
+		
+		if(choice == -1||choice == 0){}// do nothing
+		else viewSelectedProject(projects.get(choice-1));
+	}
+
+	private static void viewSelectedProject(Project project) {
+		boolean cancel = false;
+		while(!cancel){
+			boolean isLeader = false;
+			if(project.getProjectLeader() != null){
+				if(project.getProjectLeader().equals(main.getCurrentUser()))
+					isLeader = true;
+			} 
+			
+			int choice = mm.viewSelectedProject(project,isLeader);
+			switch (choice){
+				case 0: cancel = true; break;
+				case 1: mm.displayProjectDetails(project,rm); break;
+				case 2: addDeveloper(project); break;
+				case 3:	addProjectLeader(project); break;
+				case 4: project.setCostumer(ui.stringInput("a customer name"));break;
+				case 5: project.setStartDate(ui.intInputInterval("a week number", 52), ui.intInput("a year")); break; //change start date
+				case 6: project.setEndDate(ui.intInputInterval("a week number", 52), ui.intInput("a year")); break; //end date
+				case 7: project.setTimeBudget(ui.doubleInput("a time budget")); break;
+				case 8: addActivity(project); break;
+				case 9: editActivity(project); break;
+				case 10: deleteProject(project); 
+						cancel = true;
+						break;
+				case 11: rm.generateReport(project,main); break;
+			}
+		}
+	}
+
+	private static void deleteProject(Project project) {
+		main.deleteProject(project);
+		System.out.println("Project succesfully deleted!");
+	}
+
+	private static void editActivity(Project project) throws Exception {
+		System.out.println("Activities:");
+		System.out.println("0. Cancel");
+		mm.printActivitiesAndDevelopers(project);
+		int choice = ui.intInput("an activity number from the list above");
+		if(choice == 0){
+			//user has selected cancel
+		}else{
+			Activity act = project.getActivities().get(choice-1);
+			boolean cancel = false;
+			while(!cancel){
+				int editChoice = mm.editActivity(act);
+				switch(editChoice){
+					case 0: cancel = true; break;
+					case 1:	act.setName(ui.stringInput("a new name")); break;
+					case 2: act.setDescription(ui.stringInput("a description")); break;
+					case 3: act.setStartDate(interpretDate(ui.stringInput("new date in format 'ww.yyyy'"))); break;
+					case 4: act.setEndDate(interpretDate(ui.stringInput("new date in format 'ww.yyyy'"))); break;
+					case 5: act.setTimebudget(ui.intInput("a time budget (hours)")); break;
+					case 6: addDeveloper(act,project); break;
+					case 7: project.deleteActivity(act); 
+							System.out.println("Activity deleted");
+							cancel = true; break;
+				}
+			}
+		}
+	}
+
+	private static void addDeveloper(Activity act, Project pro) throws Exception {
+		System.out.println("Add developer:");
+		System.out.println("0. Cancel");
+		System.out.println("1. Add by name");
+		System.out.println("2. Search for available developer");
+		System.out.println(" (needs to be already associated with the project)");
+		int choice = ui.intInputInterval("select an option", 3);
+		
+		switch(choice){
+		case 0: break; //cancel
+		case 1: try{ act.addDev(main.findDev(ui.stringInput("username"))); break; //add by name
+				}catch(UserNotFoundException e){
+					System.out.println(e.getMessage());
+					break;
+				}
+		case 2: User user = findDeveloperByActivity(act, pro);
+				if(user != null){
+					act.addDev(user);
+					System.out.println("User " + user.getName() + " succesfully added!");
+				}
+				break;
+		}
+	}
+	
+	private static User findDeveloperByActivity(Activity act, Project pro){
+		List<User> users = pro.getAvailableDev(act.getStartDate(), act.getEndDate(), ui.intInputInterval("how many hours the developer needs to be available", (int) act.getRemainingHours()));
+		System.out.println("Select a user:");
+		if(users.isEmpty()){
+			System.out.println("No available users found for your activity");
+			return null;
+		} else{
+			int index = 0;
+			for(User user : users){
+				System.out.println(index + ". " + user.getName());
+				index++;
+			}
+			int userIndex = ui.intInputInterval("user number", index);
+			return users.get(userIndex);
+		}
+	}
+
+	private static void addActivity(Project project) {
+		String data[] = mm.addActivity();
+		
+		// Generating start end end-date from the data:
+		Date d1 = interpretDate(data[2]);
+		Date d2 = interpretDate(data[3]);
+		
+		// Generating timeBudget from data:
+		int timeBudget = Integer.parseInt(data[4]);
+		
+		Activity act = new Activity(data[0],data[1],d1,d2,timeBudget);
+		
+		try {
+			project.addActivity(act);
+			System.out.println("The activity " + data[0] + " has succesfully been added");
+		} catch (NotProjectLeaderException e) {
+			System.out.println(e.getMessage());
+		} catch (ActivityAlreadyExistsException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	private static void addProjectLeader(Project project) {
+		String developer = ui.stringInput("project leader name");
+		
+		try {
+			project.setProjectLeader(main.findDev(developer));
+			System.out.println("Developer " + developer + " succesfully designated as project leader");
+		} catch (UserNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	private static void addDeveloper(Project project) throws Exception {
+		String developer = ui.stringInput("developer name");
+		
+		try {
+			project.addDev(main.findDev(developer));
+		} catch (UserNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+		System.out.println("Developer " + developer + " Succesfully added to project");
+	}
+
+	private static void createUser() throws Exception {
+		System.out.println("Create user menu:");
+		String username = ui.stringInputSpecificLength("desired username", 4);
+		String PW = ui.stringInput("desired password");
+		int WWH = ui.intInputInterval("weekly work hours", 100);
+		User user = new User(username,PW,WWH);
+		try{
+			main.register(user);
+			System.out.println("Success! - The user has been created");
+		} catch(UserAlreadyExistsException e){
+			System.out.println("Something went wrong, either the username is already taken or you left some input fields empty!");
+		}
+		main(null);
+	}
+
+	private static void login() throws Exception{
+		System.out.println("Log in menu:");
+		String username = ui.stringInput("username");
+		String PW = ui.stringInput("password");
+		try {
+			main.login(username, PW);
+		} catch (WrongCredentialsException e) {
+			System.out.println("Error: wrong username or password");
+		}
+		main(null);
+	}
+	
+	private static Date interpretDate(String input) {
+		//Converts a string-format ww.yyyy date into a date object
+		String[] date = input.split("\\.");
+		int week = Integer.parseInt(date[0]);
+		int year = Integer.parseInt(date[1]);
+		return new Date(week,year,main);
+	}
+}
