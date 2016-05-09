@@ -1,7 +1,5 @@
 package Interface;
-/**
- * Author: Michael
- */
+
 import java.util.*;
 import projectManager.*;
 import projectManager.Date;

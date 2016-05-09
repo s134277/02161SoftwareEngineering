@@ -1,7 +1,5 @@
 package projectManager;
-/**
- * Author: Michael
- */
+
 import static org.junit.Assert.*;
 
 import java.util.Calendar;

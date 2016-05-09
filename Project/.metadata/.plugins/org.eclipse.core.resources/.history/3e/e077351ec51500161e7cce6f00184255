@@ -1,7 +1,5 @@
 package Interface;
-/**
- * Author: Jonas
- */
+
 import java.util.Scanner;
 
 /**
