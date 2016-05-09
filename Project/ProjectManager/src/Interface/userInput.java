@@ -57,14 +57,12 @@ public class userInput {
 		Scanner in = new Scanner(System.in);
 		
 		double input;
-	    do {
-	    	System.out.println("Enter " + type + ":");
-	        while (!in.hasNextDouble()) {
-	            System.out.println("Incorrect input");
+	    System.out.println("Enter " + type + ":");
+	       while (!in.hasNextDouble()) {
+	           System.out.println("Incorrect input");
 	            in.next();
 	        }
-	        input = in.nextDouble();
-	    } while (input < 0);
+	    input = in.nextDouble();
 	   
 		return input;
 	}

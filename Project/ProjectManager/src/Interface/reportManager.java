@@ -12,10 +12,9 @@ public class reportManager {
 
 	public void generateReport(Project pro, MAIN main){
 
-		String[] title = new String[3];
+		String[] title = new String[2];
 		title[0] = "Weekly status report for project: " + pro.getName();
 		title[1] = "Date: " + main.getDate().getWeek() + ", " + main.getDate().getYear();
-		title[2] = "Basic info:";
 		String[] head = generateHeader(pro);
 		String[] body = generateBody(pro);
 		
@@ -67,13 +66,13 @@ public class reportManager {
 		
 		int index = 1;
 		for(Activity act : Activities){
-			body.add(index + ". " + act.getName() + "Remaining hours/budget: " + act.getRemainingHours() + "/" + act.getTimeBudget());
+			body.add(index + ". " + act.getName() + ". Remaining hours/budget: " + act.getRemainingHours() + "/" + act.getTimeBudget());
 			index++;
 			if(act.getUsers().isEmpty()) body.add("   - No developers added");
 			else{
 				List<User> Developers = act.getUsers();
 				for(User dev : Developers){
-					body.add("   - " + dev.getName() + "Registered/budget: " + dev.getRegisteredTime(act) + "/" + act.getTimeBudget());
+					body.add("   - " + dev.getName() + ". Registered/budget: " + dev.getRegisteredTime(act) + "/" + act.getTimeBudget());
 				}
 			}
 		}

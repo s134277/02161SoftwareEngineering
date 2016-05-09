@@ -55,31 +55,42 @@ public class Interface {
 	}
 
 	private static void registerTime(MAIN main,boolean local) {
-		Project proj = null;
-		if(local) proj = mm.selectUserRelatedProject(main);
-		else proj = mm.selectAmongstAllProjects(main);
 		
-		Activity act = null;
-		if(proj != null){
-			if(local) act = mm.selectUserRelatedActivity(main,proj);
-			else act = mm.selectAmongstAllActivities(proj);
-		}
-	
-		if(act != null){
-			boolean cancel = false;
-			int choice = ui.intInputInterval("1 to select the activity: " + act.getName() + " or 0 to cancel" , 1);
-			while(!cancel){
-				switch(choice){
-					case 0: cancel = true; break; //cancel
-					case 1: main.getCurrentUser().RegisterTime(main.getDate(),proj,act.getName(),ui.doubleInput("total work hours for today")); 
-					cancel = true; break;
+		while(true){
+			Project proj = null;
+			if(local) proj = mm.selectUserRelatedProject(main);
+			else proj = mm.selectAmongstAllProjects(main);
+			while(true){
+				Activity act = null;
+				if(proj != null){
+					if(local) act = mm.selectUserRelatedActivity(main,proj);
+					else act = mm.selectAmongstAllActivities(proj);
 				}
+	
+				if(act != null){
+					boolean cancel = false;
+					int choice = ui.intInputInterval("1 to select the activity: " + act.getName() + " or 0 to cancel" , 1);
+					while(!cancel){
+						switch(choice){
+						case 0: cancel = true; break; //cancel
+						case 1: 
+							act.addDev(main.getCurrentUser());
+							main.getCurrentUser().RegisterTime(main.getDate(),proj,act.getName(),ui.doubleInput("total work hours for today")); 
+							System.out.println("Time succesfully registered");
+							cancel = true;
+							break;
+						}
+					}
+				}else{
+					System.out.println("No activity selected or found by system");
+					break;
+				}
+				System.out.println("return? (0 = yes, 1 = no)");
+				if(ui.intInputInterval("0 to return", 1)==0) break;
 			}
-		}else{
-			System.out.println("No activity selected or found by system");
+			System.out.println("return? (0 = yes, 1 = no)");
+			if(ui.intInputInterval("0 to return", 1)==0) break;
 		}
-		
-		
 	}
 
 	private static void editUser() {

@@ -178,7 +178,7 @@ public class menuManager {
 		System.out.println("Activities you are associated with:");
 		int index = 1;
 		for(Activity act : activities){
-			System.out.println(index + ". " + act.getName() + act.getRemainingHours()+ "/" +act.getTimeBudget());
+			System.out.println(index + ". " + act.getName() + " , remaining/budget: " + act.getRemainingHours()+ " / " +act.getTimeBudget());
 			System.out.println("Your current registration: " + user.getRegisteredTime(act));
 			index++;
 		}
@@ -210,6 +210,7 @@ public class menuManager {
 			index++;
 		}
 		int selection = ui.intInputInterval("a project number", index);
+		if(selection == 0) return null;
 		return projects.get(selection-1);
 	}
 
@@ -233,7 +234,9 @@ public class menuManager {
 
 	public Project selectAmongstAllProjects(MAIN main) {
 		List<Project> projects = main.getProjects();
-		return projects.get(viewProjects(projects));
+		int projectChoice = viewProjects(projects);
+		if(projectChoice == -1) return null;
+		else return projects.get(projectChoice-1);
 	}
 
 	public Activity selectAmongstAllActivities(Project proj) {
