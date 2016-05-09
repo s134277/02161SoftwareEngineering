@@ -18,16 +18,20 @@ public class reportManager {
 		title[2] = "Basic info:";
 		String[] head = generateHeader(pro);
 		String[] body = generateBody(pro);
-
+		
+		System.out.println("---------- Start of report ----------");
 		for(String tit : title){
 			System.out.println(tit);
 		}
+		System.out.println("----------");
 		for(String hea : head){
 			System.out.println(hea);
 		}
+		System.out.println("----------");
 		for(String bod : body){
 			System.out.println(bod);
 		}
+		System.out.println("---------- End of report ----------");
 	}
 	
 	public String[] generateHeader(Project pro) {
@@ -63,13 +67,13 @@ public class reportManager {
 		
 		int index = 1;
 		for(Activity act : Activities){
-			body.add(index + ". " + act.getName() + " : " + act.getRemainingHours() + "/" + act.getTimeBudget());
+			body.add(index + ". " + act.getName() + "Remaining hours/budget: " + act.getRemainingHours() + "/" + act.getTimeBudget());
 			index++;
 			if(act.getUsers().isEmpty()) body.add("   - No developers added");
 			else{
 				List<User> Developers = act.getUsers();
 				for(User dev : Developers){
-					body.add("   - " + dev.getName() + " : " + dev.getRegisteredTime(act) + "/" + act.getTimeBudget());
+					body.add("   - " + dev.getName() + "Registered/budget: " + dev.getRegisteredTime(act) + "/" + act.getTimeBudget());
 				}
 			}
 		}

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import projectManager.Activity;
+import projectManager.Date;
 import projectManager.MAIN;
 import projectManager.Project;
 import projectManager.User;
@@ -177,7 +178,8 @@ public class menuManager {
 		System.out.println("Activities you are associated with:");
 		int index = 1;
 		for(Activity act : activities){
-			System.out.println(index + ". " + act.getName());
+			System.out.println(index + ". " + act.getName() + act.getRemainingHours()+ "/" +act.getTimeBudget());
+			System.out.println("Your current registration: " + user.getRegisteredTime(act));
 			index++;
 		}
 		int selection = ui.intInputInterval("an activity number", index);
@@ -221,8 +223,11 @@ public class menuManager {
 			String name;
 			if(timeOffSelection == 1) name = "Holiday";
 			else name = "Sick";
-			//Automatically books 1/5th of weekly work hours on current day as Holiday/sick
-			main.getCurrentUser().RegisterTime(main.getDate(),null,name,main.getCurrentUser().getWeeklyWorkHours()/5);
+			System.out.println("You can register time off for one week at the time,");
+			System.out.println("You register time off by entering the week and year:");
+			Date date = new Date(ui.intInputInterval("a week", 52),ui.intInput("a year"),main);
+			main.getCurrentUser().RegisterTime(date,null,name,main.getCurrentUser().getWeeklyWorkHours());
+			System.out.println("Time off succesfully registered!");
 		}
 	}
 

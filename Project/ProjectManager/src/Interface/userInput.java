@@ -2,6 +2,13 @@ package Interface;
 
 import java.util.Scanner;
 
+/**
+ * Note: we used 
+ * http://stackoverflow.com/questions/3059333/validating-input-using-java-util-scanner
+ * for inspiration on how to make the do-while loops that takes input and validates it.
+ *
+ */
+
 public class userInput {
 	
 	public int intInput(String type){
