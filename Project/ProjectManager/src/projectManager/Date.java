@@ -1,5 +1,7 @@
 package projectManager;
-
+/**
+ * Author: Jonas
+ */
 public class Date {
 	private int week;
 	private int year;

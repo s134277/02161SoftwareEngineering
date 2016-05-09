@@ -1,5 +1,7 @@
 package projectManager;
-
+/**
+ * Author: Michael
+ */
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
